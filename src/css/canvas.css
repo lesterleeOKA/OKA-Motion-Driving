@@ -1,0 +1,512 @@
+
+.canvasWrapper {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  position: relative;
+}
+.canvasWrapper > .helmet{
+  position: absolute;
+  display: none;
+  width: calc(min(10vh, 10vw));
+  height: auto;
+}
+
+.canvasWrapper > .optionArea {
+  position: absolute;
+  left: 0px;
+  top: -60%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.canvasWrapper > .optionArea > .optionWrapper {
+  position: relative;
+  display: inline-block;
+  left: 0px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+  transition: opacity 0.1s ease;
+  opacity: 1;
+  background: url(../images/headToWin/meteor1.png);
+  background-position: center;
+  background-size: contain;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.buttonWrapper {
+  position: relative;
+  justify-content: center;
+  background-image: url(../images/headToWin/btn_playaudio.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  /*cursor: pointer;*/
+  transform: scale(1);
+  background-color: rgba(255, 255, 255, 0);
+  border:none;
+  bottom: calc(min(5.8vh, 5.5vw));
+}
+.audioPlay{
+  display: flex;
+  bottom: calc(min(5.8vh, 5.5vw));
+  width: 40%;
+  height: 40%;
+  top: -48%;
+}
+.fillBlankPlay{
+  width: 100%;
+  height: 55%;
+  top: calc(min(15vh, 15vw));
+  right: calc(min(1vh, 1vw));
+  position: absolute;
+}
+.buttonWrapper.clicked {
+  transform: scale(0.8);
+}
+
+.buttonWrapper.not-clicked {
+  transform: scale(1);
+}
+
+.questionWrapper{
+  position: fixed;
+  top:  3.5%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  transition: opacity 0.1s ease;
+  text-align: center;
+  font-size: calc(min(3.5vh, 3.5vw));
+  line-height: calc(min(3.5vh, 3.5vw));
+  /*font-family: "Arzachel", system-ui;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  /*font-family: Arial, sans-serif;
+  font-weight: 600;*/
+  width: calc(min(30.7vh, 30.7vw));
+  color: rgb(98 48 16);
+  height: auto;
+  white-space: normal;
+  line-height: 1.2;
+  align-content: center;
+}
+.questionImageWrapper{
+  position: fixed;
+  top: -10%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  transition: opacity 0.1s ease;
+  text-align: center;
+  font-size: var(--question-font-size);
+  line-height: calc(min(3.5vh, 3.5vw));
+  /*font-family: "Arzachel", system-ui;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  /*font-family: Arial, sans-serif;
+  font-weight: 600;*/
+  width: calc(min(30.7vh, 30.7vw));
+  height: calc(min(26vh, 26vw));
+  color: rgb(98 48 16);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.questionImage{
+  height: 75%;
+  filter: drop-shadow(0px 5px 5px rgba(0, 0, 0, 0.5));
+  margin-top: calc(min(3vh, 3vw));
+  padding: calc(min(2vh, 2vw));
+}
+.questionFillBlankWrapper{
+  position: absolute;
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  transition: opacity 0.1s ease;
+  text-align: left;
+  font-size: var(--question-font-size);
+  padding: calc(min(0.5vh, 0.5vw));
+  line-height: calc(min(4vh, 4vw));
+  /*font-family: "Arzachel", system-ui;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  /*font-family: Arial, sans-serif;
+  font-weight: 600;*/
+  width: calc(min(34.7vh, 34.7vw));
+  height: calc(min(15vh, 15vw));
+  color: rgb(98 48 16);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.questionAudioWrapper{
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  transition: opacity 0.1s ease;
+  text-align: left;
+  font-size: var(--question-font-size);
+  /*padding: calc(min(0.5vh, 0.5vw));
+  line-height: calc(min(4vh, 4vw));
+  font-family: "Arzachel", system-ui;
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;*/
+  /*font-family: Arial, sans-serif;
+  font-weight: 600;*/
+  width: calc(min(30.7vh, 30.7vw));
+  height: calc(min(26vh, 26vw));
+  color: rgb(98 48 16);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.instructionBtn{
+  width: calc(min(9vh, 9vw));
+  margin-right: calc(min(3vh, 3vw));
+  content: url(../images/headToWin/instuctionBtn.png);
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 1));
+}
+.instructionBtn:active {
+  width: calc(min(7vh, 7vw));
+  padding: calc(min(1vh, 1vw));
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 1));
+}
+.resetBtn{
+  background: url(../images/headToWin/reset_btn.png);
+  background-position: center;
+  background-size: cover;
+  width: 25%;
+  height: 25%;
+  position: absolute;
+  border: none;
+}
+.active {
+  transform: scale(0.7);
+  border: none;
+}
+.resetTextType{
+  top: 36%;
+  right: -4.5%;
+}
+.resetPictureType{
+  bottom: -10%;
+  right: -3.5%;
+}
+.resetAudioType{
+  bottom: 30%;
+  right: -0.5%;
+}
+
+.answerWrapper{
+    /*font-family: Arial, sans-serif;
+  font-weight: 600;
+  font-family: "Arzachel", system-ui;*/
+  /*position: absolute;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  transition: opacity 0.1s ease;
+  text-align: center;
+  font-size: calc(min(4vh, 4vw));
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  padding: calc(min(0.2vh, 0.2vw));
+  width: calc(min(32.7vh, 32.7vw));
+  height: calc(min(4.7vh, 4.7vw));
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;*/
+
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  transition: opacity 0.1s ease;
+  text-align: center;
+  font-size: calc(min(4vh, 4vw)); /* Responsive font size */
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  padding: calc(min(0.2vh, 0.2vw));
+  width: calc(min(32.7vh, 32.7vw));
+  height: calc(min(4.7vh, 4.7vw));
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.answerText {
+  line-height: 0.9;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  align-content: center;
+}
+.textType{
+  top: 23.5%;
+}
+.audioType{
+  top: 32.5%;
+}
+.pictureType{
+  top: 69.5%;
+}
+
+
+
+.correct {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url(../images/ans_tick.png);
+}
+.wrong {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url(../images/ans_cross.png);
+}
+
+.canvasWrapper > .optionArea > .optionWrapper.show {
+  position: absolute;
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation-name: fallingAnimation;
+  animation-duration: var(--fallingSpeed);
+  animation-timing-function: linear;
+  transform: scale(1);
+}
+
+.canvasWrapper > .optionArea > .optionWrapper.spin {
+  position: absolute;
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation-name: spinning;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+}
+
+.canvasWrapper > .optionArea > .optionWrapper.showBonunce {
+  position: absolute;
+  opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation-name: bounceAnimation;
+  animation-duration: var(--bounce-speed);
+  animation-timing-function: cubic-bezier(0.42,0,1,1);
+  transform-origin: center bottom;
+}
+
+.canvasWrapper > .optionArea > .optionWrapper > .option {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 90%;
+  text-align: center;
+  font-size: var(--font-size);
+  /*font-family: "Arzachel", system-ui;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  /*font-family: Arial, sans-serif;
+  font-weight: 600;*/
+  background: transparent;
+  border: none;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+  transform-origin: center center; /* Ensure the options scale from the center */
+  will-change: transform; /* Optimize the animation */
+  word-wrap: break-word; /* Allow long words to break and wrap to the next line */
+  white-space: normal; /* Allow lines to break normally */
+  overflow-wrap: break-word; /* Break long words */
+  padding: 5px; /* Add padding to avoid text touching edges */
+  box-sizing: border-box; /* Include padding in width/height calculations */
+  line-height: var(--line-height);
+}
+.canvasWrapper > .optionArea > .optionWrapper > .option.fixedText {
+  animation-name: fixedRotation;
+  animation-duration: var(--fallingSpeed);
+  animation-timing-function: linear;
+}
+
+:root {
+  --bounce-angle: 0deg;
+  --bounce-bottom-angle: 0deg;
+  --bounce-x: 0px;
+  --bounce-speed: 1s;
+  --head-position-x: 0px;
+  --head-position-y: 0px;
+  --head-bounce-y: 0px;
+  --fallingSpeed: 2.5s;
+  --top-height: 0px;
+  --bottom-height: 200px;
+  --font-size: 3vh;
+  --line-height: 0px;
+  --question-font-size:3vh;
+}
+
+.fadeIn {
+  animation: fade-In;
+  animation-duration: 1s;
+}
+
+.fadeOut {
+  animation: fade-Out;
+  animation-duration: 1s;
+}
+
+/*@keyframes bounceAnimation {
+  0% {
+    transform: translate(0, var(--head-position-y)) scale(1);
+  }
+  25% {
+    transform: translate(var(--bounce-x), calc(var(--head-position-y) - 100px)) scale(1);
+  }
+  100% {
+    transform: translate(var(--bounce-x), var(--bottom-height)) scale(0.8);
+  }
+}*/
+
+@keyframes bounceAnimation {
+  0% {
+    transform: translate(0, var(--head-position-y)) rotate(0deg);
+  }
+  25%{
+    transform: translate(var(--bounce-x), var(--head-bounce-y)) rotate(var(--bounce-angle));
+  }
+  100% {
+    transform: translate(var(--bounce-x), var(--bottom-height)) rotate(var(--bounce-bottom-angle));
+  }
+}
+
+@keyframes fallingAnimation {
+  0% {
+    transform: translateY(var(--top-height)) rotate(0deg);
+  }
+  100% {
+    transform: translateY(var(--bottom-height)) rotate(360deg);
+  }
+}
+
+@keyframes fixedRotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes fade-In{
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-Out{
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.canvasWrapper > .optionArea > .optionWrapper > .selectCount {
+  position: absolute;
+  font-weight: bold;
+  font-size: calc(min(15vh, 15vw));
+  color: #FCC946;
+  text-shadow: 0px 0px 12px black;
+  font-family: "Chalkboard SE", "Comic Sans MS", "Comic Sans", cursive;
+  opacity: 0;
+}
+
+@property --p{
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.canvasWrapper > .optionArea > .optionWrapper.show.touch:not(.showColorBorder) {
+  animation: optionBlinkInnerYellow 0.2s;
+  animation-iteration-count: infinite;
+}
+
+.canvasWrapper > .optionArea > .optionWrapper.show.touch:not(.showColorBorder) > .selectCount {
+  opacity: 1;
+}
+/*.canvasWrapper > .optionArea > .optionWrapper.show.touch:not(.showColorBorder)::after {
+  counter-reset: selectCount calc(3 - (var(--p) / 50));
+  content: counter(selectCount);
+  font-size: calc(min(15vh, 15vw));
+  position: absolute;
+  font-weight: bold;
+  color: #FCC946;
+  text-shadow: 0px 0px 12px black;
+  font-family: "Chalkboard SE", "Comic Sans MS", "Comic Sans", cursive;
+}*/
+
+.canvasWrapper > .optionArea > .optionWrapper.showColorBorder::after {
+  content: '';
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.canvasWrapper > .optionArea > .optionWrapper.correct.showColorBorder {
+  background-color: #84BD3B;
+}
+.canvasWrapper > .optionArea > .optionWrapper.correct.showColorBorder::after {
+  background-image: url(../images/ans_tick.png);
+}
+.canvasWrapper > .optionArea > .optionWrapper.wrong.showColorBorder,
+.canvasWrapper > .optionArea > .optionWrapper.wrong.showColorBorder {
+  background-color: #EE4865;
+}
+.canvasWrapper > .optionArea > .optionWrapper.wrong.showColorBorder::after,
+.canvasWrapper > .optionArea > .optionWrapper.wrong.showColorBorder::after {
+  background-image: url(../images/ans_cross.png);
+}
+
+@keyframes optionBlinkInnerYellow {
+  0% {
+    box-shadow: 0px 0px 10px 0px #000000, inset 0 0 0 10px #FCC946;
+  }
+  50% {
+    box-shadow: 0px 0px 10px 0px #000000, inset 0 0 0 10px transparent;
+  }
+  100% {
+    box-shadow: 0px 0px 10px 0px #000000, inset 0 0 0 10px #FCC946;
+  }
+}
+@keyframes optionBlinkYellow { 50% { border-color:#FCC946; }  }
+
+@keyframes p {
+  from{--p:0}
+  to{--p:100}
+}
+
+@font-face {
+  font-family: 'PoetsenOne';
+  src: url('../font/PoetsenOne-Regular.ttf') format('truetype');
+}
+

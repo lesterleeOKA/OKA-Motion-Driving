@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+  <title>Head To Win</title>
+  <meta name="google" content="notranslate">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="src/css/style.css">
+  <link rel="stylesheet" href="src/css/loadingBar.css">
+  <link rel="stylesheet" href="src/css/instruction.css">
+  <link rel="stylesheet" href="src/css/canvas.css">
+  <link rel="stylesheet" href="src/css/game.css">
+  <link rel="stylesheet" href="src/css/exit.css">
+  <link rel="stylesheet" href="src/css/finished.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+</head>
+<body id="bgImage">
+  <div class="loadingBarWrapper">
+    <div class="loadingCharacter"></div>
+    <div class="loading-container">
+      <div class="loadingFontFixed">Now Loading</div>
+      <div class="loadingFont"></div>
+    </div>
+    <div id="loadingBar" class="loadingBar">
+      <div class="brownBar"></div>
+      <div class="greenBar" id="greenBar"></div>
+      <div class="outterBorder"></div>
+      <div class="innerBorder"></div>
+    </div>
+  </div>
+
+  <div class="canvasWrapper">
+    <canvas style="scale: 1.004;"></canvas>
+    <video id="videoStream" playsinline style="
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    visibility: hidden;
+    display: none;
+    ">
+    </video>
+    <video id="video" playsinline style="
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    visibility: hidden;
+    display: none;
+    ">
+    </video>
+    <div class="optionArea"></div>
+
+    <img id="head" src="./src/images/headToWin/helmet.png" class="helmet" />
+  </div>
+
+  <div class="instructionWrapper">
+    <!--<img class="schoolLogo"></img>-->
+    <!--<div class="gameTextTitle">
+      Motion Spelling
+    </div>-->
+    <div class="instructionBoard">
+      <div class="gameTitle"></div>
+      <div class="previewImage" id="previewImg"></div>
+      <div class="instructionRule">
+        <div class="icon"></div>
+        <div class="instructionContent">Use your head to collide the letters!</div>
+      </div>
+      <div class="startBtn" alt="Start Button"></div>
+    </div>
+  </div>
+
+  <div class="gameWrapper">
+    <div class="prepareBoardWrapper">
+      <img class="prepareBoard"></img>
+      <div class="rule">Stay your head under the white line.</div>
+      <!--<div class="prepareTitle">Preparation</div>
+      <div class="rule-1">1) Please stand inside the box of the screen.</div>
+      <div class="rule-2">2) The system will automatically start a countdown.</div>
+      <div class="rule-3">3)  Please do not leave your current position during the game.</div>-->
+    </div>
+    <div class="ansResult">
+      <div class="wellDone"></div>
+      <div class="incorrect"></div>
+    </div>
+    <!--<div class="outBoxBoardWrapper"><img class="outBoxBoard"></img></div>-->
+    <div class="topLeftControl hide">
+      <!--<div class="stageWrapper">
+        <link rel="preload" as="image" href="./src/images/stageStar1.png">
+        <link rel="preload" as="image" href="./src/images/stageStar2.png">
+        <link rel="preload" as="image" href="./src/images/stageStar3.png">
+        <img class="stageStar"></img>
+      </div>-->
+      <div class="timeWrapper">
+        <div class="timeBoard" id="fpsButton"></div>
+        <div class="timeText">10</div>
+      </div>
+      <div class="scoreWrapper">
+        <img class="scoreBoard"></img>
+        <div class="playerText">P1</div>
+        <div class="scoreText"></div>
+        <div class="playerIcon">
+          <img src="./src/images/headToWin/p1_icon.png" alt="Player Icon" id="userIcon">
+        </div>
+        <div class="playerName">
+          <div class="playerNameBox"></div>
+          <div class="playerNameText"></div>
+        </div>
+      </div>
+    </div>
+    <div class="topRightControl">
+      <img class="tips hide"></img>
+      <img class="motionBtn off"></img>
+      <img class="musicBtn on"></img>
+      <img class="exitBtn"></img>
+    </div>
+    <img class="count"></img>
+    <div class="questionBoard"></div>
+  </div>
+
+  <div class="musicOnOffWrapper">
+    <div class="musicOnOffBoard">
+      <div class="musicWrapper">
+        <div class="onBtn"></div>
+        <div class="offBtn"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exitWrapper">
+    <div class="exitBoard">
+      <div class="exitBoardText">Are you leaving the game?</div>
+      <div class="btnWrapper">
+        <div class="continueBtn">
+          <div class="continueText">Continue</div>
+        </div>
+        <div class="backHomeBtn">
+          <div class="homeText">Home</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loginErrorWrapper">
+    <div class="loginErrorBoard">
+      <div class="loginErrorText">Unable to load game. Make sure you are connected to the internet and reload again.</div>
+      <div class="errorWrapper">
+        <div class="reloadBtn"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progressBarWrapper" style="display: none;">
+    <div id="progressBar" class="progressBar">
+      <div class="progressColorBar" id="progressColorBar"></div>
+      <div class="progressText" id="progressText">0%</div>
+      <div class="progressOutterBorder"></div>
+      <div class="progressInnerBorder"></div>
+    </div>
+  </div>
+
+  <div class="finishedWrapper">
+    <div class="finishedBoardWrapper">
+      <img class="finishedBoard"></img>
+      <div class="scoreTimeWrapper">
+        <div class="row score">
+          <div class="value">5</div>
+        </div>
+        <div class="row score">
+          <div id="star1" class="icon"></div>
+          <div id="star2" class="icon"></div>
+          <div id="star3" class="icon"></div>
+        </div>
+      </div>
+      <div class="finishedBtnWrapper">
+        <div class="playAgainBtn">
+        </div>
+        <div class="backHomeBtn">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="version">Ver:1.07</div>
+  <div class="debug" id="stats"></div>
+</body>
+<script src="src/index.js"></script>
+
+</html>

@@ -1,0 +1,782 @@
+
+.gameWrapper {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: -100vh;
+  left: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: top 0.5s ease;
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .prepareBoardWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: calc(min(0.5vh, 0.5vw));
+  left: 2vh;
+}
+
+.gameWrapper > .prepareBoardWrapper > .prepareBoard {
+  content: url(../images/headToWin/preparationBoard.png);
+  height: calc(min(10vh, 12.5vw));
+  margin-top: 3.5vh;
+  /*position: absolute;
+  top: calc(min(2vh, 2vw));*/
+}
+
+.gameWrapper > .prepareBoardWrapper >.prepareTitle {
+  position: absolute;
+  bottom: 78%;
+  /*font-family: 'BoinkLETPlain', sans-serif;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  font-size: calc(min(4.5vh, 4.5vw));
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+  /*-webkit-text-stroke: 3px #582c02;*/
+  pointer-events: none;
+}
+.gameWrapper > .prepareBoardWrapper >.rule {
+  position: absolute;
+  top: 43%;
+  /*font-family: "Arzachel", system-ui;*/
+  /*;
+  font-weight: 100;
+    font-family: Arial, sans-serif;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  font-size: calc(min(2vh, 2vw));
+  color: #4b3002;
+  pointer-events: none;
+  line-height: 1;
+  text-align: left;
+  padding-left: calc(min(2.5vh, 5.5vw));
+  font-size: calc(min(1.9vh, 1.9vw));
+  /*font-size: calc(min(2vh, 2vw));*/
+  margin-top: calc(min(1.1vh, 1.1vw));
+}
+.gameWrapper > .prepareBoardWrapper >.rule-1 {
+  position: absolute;
+  top: 30%;
+  /*font-family: "Arzachel", system-ui;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  font-size: calc(min(2.5vh, 2.5vw));
+  color: #4b3002;
+  pointer-events: none;
+  line-height: 1;
+  width: calc(min(55vh, 55vw));
+  text-align: left;
+  padding-left: calc(min(5vh, 5vw));
+}
+.gameWrapper > .prepareBoardWrapper >.rule-2 {
+  position: absolute;
+  top: 45%;
+  /*font-family: "Arzachel", system-ui;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  font-size: calc(min(2.5vh, 2.5vw));
+  color: #4b3002;
+  pointer-events: none;
+  line-height: 1;
+  width: calc(min(55vh, 55vw));
+  text-align: left;
+  padding-left: calc(min(5vh, 5vw));
+}
+.gameWrapper > .prepareBoardWrapper >.rule-3 {
+  position: absolute;
+  top: 70%;
+  /*font-family: "Arzachel", system-ui;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  font-size: calc(min(2.5vh, 2.5vw));
+  color: #391d02;
+  pointer-events: none;
+  line-height: 1;
+  width: calc(min(55vh, 55vw));
+  text-align: left;
+  padding-left: calc(min(5vh, 5vw));
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .ansResult {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gameWrapper > .ansResult > .wellDone{
+  opacity: 0;
+  content: url(../images/headToWin/ui_welldone.png);
+  height: calc(min(50.44vh, 50.44vw));
+ /* animation: dropAndDisappear 2s forwards; */
+}
+.gameWrapper > .ansResult > .wellDone.show{
+  height: calc(min(50.44vh, 50.44vw));
+  animation: dropAndDisappear 1s forwards;
+  z-index: 5;
+}
+
+.gameWrapper > .ansResult > .incorrect{
+  position: absolute;
+  opacity: 0;
+  content: url(../images/headToWin/ans_wrong_en.png);
+  width: calc(min(40.44vh, 40.44vw));
+  height: auto;
+ /* animation: dropAndDisappear 2s forwards; */
+}
+.gameWrapper > .ansResult > .incorrect.show{
+  animation: dropAndDisappear 1s forwards;
+  z-index: 5;
+}
+
+:root {
+  --size-in-px: 80px;
+  --dropStartPoint: calc(var(--size-in-px) / var(--viewport-height) * 100vh);
+  --dropBottomPoint: 10vh;
+}
+
+@keyframes dropAndDisappear {
+  0% {
+    opacity: 0.5;
+    transform: translateY(var(--dropStartPoint));  /* Start at the original position */
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(var(--dropBottomPoint));  /* Drop the image halfway down */
+  }
+  95% {
+    opacity: 1;
+    transform: translateY(var(--dropBottomPoint));  /* Back to the bottom */
+  }
+  100% {
+    opacity: 0;  /* Make the image disappear */
+    transform: translateY(var(--dropBottomPoint));  /* Keep the image at the bottom */
+  }
+}
+
+.gameWrapper > .ansResult > .ans {
+  color: white;
+  padding: calc(min(1.5vh, 1.5vw));
+  border-radius: calc(min(15vh, 15vw));
+  width: calc(min(20vh, 20vw));
+  text-align: center;
+  font-size: calc(min(3vh, 3vw));
+  font-weight: bold;
+  display: none;
+}
+.gameWrapper > .ansResult > .ans.show {
+  display: block;
+}
+.gameWrapper > .ansResult > .ans.correct {
+  background-color: #84BD3B;
+}
+.gameWrapper > .ansResult > .ans.wrong {
+  background-color: #EE4865;
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .outBoxBoardWrapper {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/*.gameWrapper > .outBoxBoardWrapper > .outBoxBoard {
+  content: url(../images/outBox.png);
+  height: calc(min(40vh, 40vw));
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topLeftControl {
+  position: absolute;
+  top: calc(min(1vh, 2vw));
+  left: calc(min(-0.5vh, -0.5vw));
+  justify-content: space-evenly;
+  display: flex;
+  align-items: baseline;
+  transition: all 0.5s ease;
+  opacity: 1;
+  z-index: 10;
+}
+
+.gameWrapper > .topLeftControl.hide { opacity: 0; }
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topLeftControl > .stageWrapper {
+  position: relative;
+}
+/*.gameWrapper > .topLeftControl > .stageWrapper > .stageStar {
+  height: calc(min(11.7vh, 11.7vw));
+  margin-left: calc(min(3vh, 3vw));
+  content: url(../images/stageStar1.png);
+}
+.gameWrapper > .topLeftControl > .stageWrapper > .stageStar.stage0 { content: url(../images/stageStar1.png); }
+.gameWrapper > .topLeftControl > .stageWrapper > .stageStar.stage1 { content: url(../images/stageStar2.png); }
+.gameWrapper > .topLeftControl > .stageWrapper > .stageStar.stage2 { content: url(../images/stageStar3.png); }
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topLeftControl > .scoreWrapper {
+  position: relative;
+}
+.gameWrapper > .topLeftControl > .scoreWrapper > .scoreBoard {
+  /*height: calc(min(11.7vh, 11.7vw));*/
+  width: calc(min(25.7vh, 25.7vw));
+  margin-left: calc(min(2vh, 2vw));
+  content: url(../images/headToWin/p1_score_name.png);
+  margin-bottom: -4.8vh;
+  /*filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));*/
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topLeftControl > .scoreWrapper > .scoreText {
+  position: absolute;
+  color: #fff;
+  font-size: calc(min(3.5vh, 3.5vw));
+  top: calc(min(5.7vh, 5.7vw));
+  right: calc(min(7vh, 7vw));
+  font-family: 'BoinkLETPlain', sans-serif;
+  font-weight: normal;
+  text-shadow: calc(min(0.2vh, 0.2vw)) calc(min(0.2vh, 0.2vw)) #000;
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topLeftControl > .scoreWrapper > .playerText {
+  position: absolute;
+  color: #3cadee;
+  font-size: calc(min(2.7vh, 2.7vw));
+  top: calc(min(2.5vh, 2.5vw));
+  right: calc(min(10.1vh, 10.1vw));
+  font-family: 'BoinkLETPlain', sans-serif;
+  font-weight: normal;
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topLeftControl > .scoreWrapper > .playerIcon {
+  position: absolute;
+  top: calc(min(3.5vh, 3.5vw));
+  right: calc(min(14vh, 14vw));
+  width: calc(min(8.2vh, 8.2vw));
+  height: auto;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gameWrapper > .topLeftControl > .scoreWrapper > .playerName {
+  position: absolute;
+  top: calc(min(11.3vh, 11.3vw));
+  right: calc(min(6.6vh, 6.6vw));
+  width: calc(min(7.8vh, 7.8vw));
+  height: calc(min(2.9vh, 2.9vw));
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gameWrapper > .topLeftControl > .scoreWrapper > .playerName > .playerNameBox {
+  /*content: url(../images/fruitNinja/name_box.png);*/
+  position: relative;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+  url(../images/headToWin/name_box.png) no-repeat center,
+  #3cadee; /* The background color */
+  background-size: cover; /* Ensure the image covers the element */
+  background-blend-mode: multiply; /* Blend the color with the image */
+  border-radius: 0 0 calc(min(1vh, 1vw)) calc(min(1vh, 1vw));
+}
+.gameWrapper > .topLeftControl > .scoreWrapper > .playerName > .playerNameText {
+  position: absolute;
+  color: #ffffff;
+  font-size: calc(min(1vh, 2.3vw));
+  top: 0;
+  /*font-family: 'Kaiu', sans-serif;*/
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gameWrapper > .topLeftControl > .scoreWrapper > .playerIcon img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topLeftControl > .timeWrapper {
+  position: relative;
+}
+.gameWrapper > .topLeftControl > .timeWrapper > .timeBoard {
+  height: calc(min(11.7vh, 11.7vw));
+  margin-left: calc(min(-1vh, 3vw));
+  content: url(../images/headToWin/time_new.png);
+  filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));
+}
+.gameWrapper > .topLeftControl > .timeWrapper > .timeText {
+  position: absolute;
+  color: #fff;
+  font-size: calc(min(3.5vh, 3.5vw));
+  top: calc(min(4.2vh, 4.2vw));
+  right: calc(min(5vh, 5vw));
+  font-family: 'BoinkLETPlain', sans-serif;
+  font-weight: normal;
+  text-shadow: calc(min(0.2vh, 0.2vw)) calc(min(0.2vh, 0.2vw)) #000;
+  scale: 1;
+}
+.gameWrapper > .topLeftControl > .timeWrapper > .timeText.lastTen {
+  animation-name: colorShine, lastTenScale;
+  animation-duration: 1s, 0.5s;
+  animation-iteration-count: infinite, infinite;
+  animation-timing-function: ease-in-out, ease-in-out;
+}
+
+@keyframes colorShine {
+  0%, 100% {
+    color: #fff;
+  }
+  50% {
+    color: #fffb00;
+  }
+}
+
+@keyframes lastTenScale {
+  0%, 100% {
+    scale: 0.9;
+  }
+  50% {
+    scale: 1;
+  }
+}
+
+@font-face {
+  font-family: 'BoinkLETPlain';
+  src: url('../font/BoinkLETPlain.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PoetsenOne';
+  src: url('../font/PoetsenOne-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Kaiu';
+  src: url('../font/kaiu.ttf') format('truetype');
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topRightControl {
+  position: absolute;
+  top: calc(min(1vh, 2vw));
+  right: 0px;
+  justify-content: space-evenly;
+  display: flex;
+  align-items: baseline;
+  z-index: 10;
+}
+
+.gameWrapper > .topRightControl > .tips {
+  height: calc(min(11.7vh, 11.7vw));
+  transition: all 0.5s ease;
+  opacity: 1;
+  margin-right: calc(min(3vh, 3vw));
+}
+/*.gameWrapper > .topRightControl > .tips.hide { opacity: 0; }
+.gameWrapper > .topRightControl > .tips.tipsOutBox { content: url(../images/tipsOutBox.png); }
+.gameWrapper > .topRightControl > .tips.tipsReady { content: url(../images/tipsReady.png); }
+.gameWrapper > .topRightControl > .tips.tipsStart { content: url(../images/tipsStart.png); }
+
+/*-----------------------------------------------------------------------------------------------*/
+.loginErrorWrapper {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: -100vh;
+  left: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: top 0.5s ease, opacity 0.1s ease 0.5s;
+  opacity: 0;
+  pointer-events: none;
+  background-color: transparent;
+  z-index: 11;
+}
+.loginErrorWrapper.show {
+  top: 0px;
+  opacity: 1;
+  /*transition: top 0.5s ease, opacity 0.1s ease, background-color 0.5s ease 0.5s;*/
+  pointer-events: all;
+  background-color: rgba(0,0,0,0.5);
+}
+.loginErrorWrapper > .loginErrorBoard {
+  background-image: url(../images/headToWin/ui_board_error.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: calc(min(45.5vh, 45.5vw));
+  height: calc(min(45.5vh, 45.5vw));
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+  justify-content: start;
+}
+.loginErrorWrapper > .loginErrorBoard > .errorWrapper {
+  width: 65%;
+  height: calc(min(10vh, 10vw));
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: calc(min(25vh, 25vw));
+}
+.loginErrorWrapper > .loginErrorBoard > .loginErrorText{
+  position: absolute;
+  top: 20%;
+  /*font-family: "Arzachel", system-ui;*/
+  font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
+  width: 70%;
+  font-size: calc(min(3vh, 3vw));
+  color: #0a0a0a;
+  /*text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);*/
+  /*-webkit-text-stroke: 2px #797979;*/
+  text-align: left;
+  pointer-events: none;
+}
+.loginErrorWrapper > .loginErrorBoard  > .errorWrapper > .reloadBtn {
+  content: url(../images/headToWin/Reload_btn.png);
+  height: calc(min(5vh, 5vw));
+  scale: 1;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  right: calc(min(1vh, 1vw));
+  top: calc(min(4vh, 4vw));
+}
+.loginErrorWrapper > .loginErrorBoard  > .errorWrapper > .reloadBtn:active,
+.loginErrorWrapper > .loginErrorBoard  > .errorWrapper > .reloadBtn.touched {
+  scale: 0.8;
+  -webkit-tap-highlight-color: transparent;
+}
+/*-----------------------------------------------------------------------------------------------*/
+.musicOnOffWrapper {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: -100vh;
+  left: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: top 0.5s ease, opacity 0.1s ease 0.5s;
+  opacity: 0;
+  pointer-events: none;
+  background-color: transparent;
+  z-index: 11;
+}
+.musicOnOffWrapper.show {
+  top: 0px;
+  opacity: 1;
+  transition: top 0.5s ease, opacity 0.1s ease, background-color 0.5s ease 0.5s;
+  pointer-events: all;
+  background-color: rgba(0,0,0,0.5);
+}
+.musicOnOffWrapper > .musicOnOffBoard {
+  background-image: url(../images/headToWin/ui_board_sound.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: calc(min(45.5vh, 45.5vw));
+  height: calc(min(45.5vh, 45.5vw));
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-direction: column;
+  justify-content: start;
+}
+.musicOnOffWrapper > .musicOnOffBoard > .musicWrapper {
+  width: 65%;
+  height: calc(min(10vh, 10vw));
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: calc(min(25vh, 25vw));
+}
+.musicOnOffWrapper > .musicOnOffBoard  > .musicWrapper > .offBtn {
+  content: url(../images/headToWin/btn_no.png);
+  height: calc(min(5vh, 5vw));
+  scale: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+.musicOnOffWrapper > .musicOnOffBoard  > .musicWrapper > .offBtn:active,
+.musicOnOffWrapper > .musicOnOffBoard  > .musicWrapper > .offBtn.touched  {
+  scale: 0.8;
+  -webkit-tap-highlight-color: transparent;
+}
+.musicOnOffWrapper > .musicOnOffBoard  > .musicWrapper > .onBtn {
+  content: url(../images/headToWin/btn_yes.png);
+  height: calc(min(5vh, 5vw));
+  scale: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+.musicOnOffWrapper > .musicOnOffBoard  > .musicWrapper > .onBtn:active,
+.musicOnOffWrapper > .musicOnOffBoard  > .musicWrapper > .onBtn.touched {
+  scale: 0.8;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gameWrapper > .topRightControl > .musicBtn {
+  width: calc(min(9vh, 9vw));
+  margin-right: calc(min(3vh, 3vw));
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+  touch-action: manipulation;
+  transform: scale(1);
+  transition: transform 0.2s ease-in-out;
+}
+.gameWrapper > .topRightControl > .musicBtn:active,
+.gameWrapper > .topRightControl > .musicBtn.touched {
+  width: calc(min(7vh, 7vw));
+  padding: calc(min(1vh, 1vw));
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+  transform: scale(0.8);
+}
+.gameWrapper > .topRightControl > .musicBtn.on {
+  content: url(../images/musicBtnOn.png);
+}
+.gameWrapper > .topRightControl > .musicBtn.off {
+  content: url(../images/musicBtnOff.png);
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topRightControl > .motionBtn {
+  width: calc(min(9vh, 9vw));
+  margin-right: calc(min(3vh, 3vw));
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+  touch-action: manipulation;
+  transform: scale(1);
+  transition: transform 0.2s ease-in-out;
+}
+.gameWrapper > .topRightControl > .motionBtn:active,
+.gameWrapper > .topRightControl > .motionBtn.touched {
+  width: calc(min(7vh, 7vw));
+  padding: calc(min(1vh, 1vw));
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+  transform: scale(0.8);
+}
+.gameWrapper > .topRightControl > .motionBtn.on {
+  content: url(../images/headToWin/motionBtnOn.png);
+}
+.gameWrapper > .topRightControl > .motionBtn.off {
+  content: url(../images/headToWin/motionBtnOff.png);
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .topRightControl > .exitBtn {
+  content: url(../images/exitBtn.png);
+  width: calc(min(9vh, 9vw));
+  margin-right: calc(min(3vh, 3vw));
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+  touch-action: manipulation;
+  transform: scale(1);
+  transition: transform 0.2s ease-in-out;
+}
+.gameWrapper > .topRightControl > .exitBtn:active,
+.gameWrapper > .topRightControl > .exitBtn.touched {
+  width: calc(min(7vh, 7vw));
+  padding: calc(min(1vh, 1vw));
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+  transform: scale(0.8);
+}
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .count {
+  /*max-height: calc(min(20vh, 20vw));*/
+  transition: all 0.4s ease;
+  position: absolute;
+  width: calc(min(40vh, 40vw));
+  filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.35));
+  margin-left: calc(min(5vh, 5vw));
+  transform: scale(0);
+  transform-origin: center;
+}
+.gameWrapper > .count.c0 {
+  content: url(../images/headToWin/ui_go.png);
+  animation: scaleUp 0.75s forwards;
+  opacity: 1;
+}
+.gameWrapper > .count.c1 {
+  content: url(../images/headToWin/ui_1.png);
+  animation: scaleUp 0.75s forwards;
+  opacity: 1;
+}
+.gameWrapper > .count.c2 {
+  content: url(../images/headToWin/ui_2.png);
+  animation: scaleUp 0.75s forwards;
+  opacity: 1;
+}
+.gameWrapper > .count.c3 {
+  content: url(../images/headToWin/ui_3.png);
+  animation: scaleUp 0.75s forwards;
+  opacity: 1;
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+.gameWrapper > .stage {
+  max-height: calc(min(20vh, 20vw));
+  transition: all 0.4s ease;
+  position: absolute;
+}
+/*.gameWrapper > .stage.s0 {
+  content: url(../images/stage1.png);
+}
+.gameWrapper > .stage.s1 {
+  content: url(../images/stage2.png);
+}
+.gameWrapper > .stage.s2 {
+  content: url(../images/stage3.png);
+}
+/*-----------------------------------------------------------------------------------------------*/
+
+.gameWrapper > .questionBoard {
+  position: absolute;
+  width: calc(min(45vh, 45vw));
+  height: calc(min(39vh, 39vw));
+  top: calc(min(1vh, 2vw));
+  opacity: 0;
+}
+
+.questionBg{
+  width: 100%;
+  height: auto;
+  content: url(../images/headToWin/ui_board_qtext.png);
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.35));
+  margin-left: calc(min(1.5vh, 1.5vw));
+}
+
+.questionAudioBg{
+  width: 100%;
+  height: auto;
+  content: url(../images/headToWin/ui_board_qaudio.png);
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.35));
+  left: 2.5%;
+  position: absolute;
+}
+
+.questionImgBg {
+  width: 105%;
+  height: 110%;
+  content: url(../images/headToWin/ui_board_qpic.png);
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.35));
+  display: block;
+  margin: 0 auto;
+  margin-left: calc(min(0.2vh, 0.2vw));
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+.progressBarWrapper {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: calc(min(45vh, 45vw) - 20px);
+  height: calc(min(4.5vh, 4.5vw));
+  top: calc(min(92vh, 92vw));
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: calc(min(5vh, 5vw));
+}
+.progressBar {
+  position: relative;
+  width: 80%;
+  height: 80%;
+  margin: calc(min(0.5vh, 0.5vw));
+}
+.progressColorBar, .progressOutterBorder, .progressInnerBorder {
+  width:100%;
+  height:100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  border-radius: 20vw;
+}
+.progressBrownBar {
+  background-color:#000000;
+}
+.progressColorBar {
+  background: none;
+  width:100%;
+  height:100%;
+  position: relative;
+  overflow: hidden;
+}
+.progressText {
+  position: absolute;
+  top: 50%;
+  left: 110%;
+  font-family: 'BoinkLETPlain', sans-serif;
+  transform: translate(-50%, -50%);
+  color:  #7C5729;
+  font-weight: bold;
+  font-size: calc(min(2.5vh, 2.5vw));
+  z-index: 1;
+}
+.progressColorBar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 104%;
+  width: 104%;
+  background-image: url(../images/headToWin/progress_bar_color.png);
+  background-repeat: no-repeat;
+  background-size: 104% 104%;
+  background-position: right;
+  transition: var(--progress-transition, right 0.5s ease-out);
+  right: var(--progress-right, 100%);
+}
+.progressOutterBorder {
+  box-shadow: inset 0 0 10px rgba(84, 83, 83, 0.2);
+}
+.progressInnerBorder {
+  box-shadow: inset 0 0 10px rgba(84, 83, 83, 0.2);
+}

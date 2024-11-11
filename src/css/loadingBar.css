@@ -1,0 +1,105 @@
+
+.loadingBarWrapper {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: calc(min(60vh, 60vw));
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingBarWrapper > .loadingCharacter {
+  height: calc(min(18vh, 18vw));
+  content: url(../images/headToWin/ui_princewalk_apng.png);
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+/*.loadingBarWrapper > .loadingText {
+  content: url(../images/loadingText.png);
+  width: calc(min(29.3vh, 29.3vw));
+}*/
+
+.loadingBar {
+  position: relative;
+  width: calc(min(35vh, 35vw) - 20px);
+  height: calc(min(3vh, 3vw));
+}
+
+
+.brownBar, .greenBar, .outterBorder, .innerBorder {
+  width:100%;
+  height:100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  border-radius: 5vw;
+}
+
+.brownBar {
+  background-color:#000000;
+  margin: 5px;
+}
+
+.greenBar {
+  background: none;
+  margin: calc(min(5px, 10px));
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.greenBar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 104%;
+  width: 104%;
+  background-image: url(../images/headToWin/ui_loadingfill.png);
+  background-repeat: no-repeat;
+  background-size: 104% 104%;
+  background-position: right;
+  transition: var(--progress-transition, right 1s ease-out);
+  right: var(--progress-right, 100%);
+}
+
+.outterBorder {
+  border: calc(min(5px, 10px)) solid #FFF;
+  box-shadow: 0px 4px 0px 0px rgba(0, 0, 0, 0.2);
+}
+.innerBorder {
+  border: calc(min(2.5px, 5px)) solid #FFF;
+  margin: calc(min(2.5px, 5px));
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingFontFixed{
+  position: relative;
+  font-family: "Arzachel", system-ui;
+  font-size: calc(min(4vh, 4vw));
+  font-weight: 400;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(20px 20px 20px rgba(0, 0, 0, 1));
+  padding-bottom: 1vw;
+  right: 5%;
+  /*-webkit-text-stroke: 2px #ff8c00;*/
+}
+
+.loadingFont{
+  position: absolute;
+  font-family: "Arzachel", system-ui;
+  font-size: calc(min(5vh, 5vw));
+  font-weight: 400;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+  padding-bottom: 1vw;
+  left: 72%;
+  /*-webkit-text-stroke: 2px #ff8c00;*/
+}

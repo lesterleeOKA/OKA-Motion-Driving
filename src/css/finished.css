@@ -1,0 +1,182 @@
+.finishedWrapper {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: -100vh;
+  left: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: top 0.5s ease, opacity 0.1s ease 0.5s;
+  opacity: 0;
+  pointer-events: none;
+}
+.finishedWrapper.show {
+  top: 0px;
+  opacity: 1;
+  transition: top 0.5s ease, opacity 0.1s ease;
+  pointer-events: all;
+}
+/*-----------------------------------------------------------------------------------------------*/
+.finishedWrapper > .finishedBoardWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.finishedWrapper > .finishedBoardWrapper > .finishedBoard {
+  position: relative;
+  height: calc(min(50vh, 50vw));
+  content: url(../images/headToWin/ui_board_fail_1p.png);
+}
+.finishedWrapper > .finishedBoardWrapper > .finishedBoard.success {
+  content: url(../images/headToWin/ui_board_pass_1p.png);
+}
+.finishedWrapper > .finishedBoardWrapper > .finishedBoard.fail {
+  content: url(../images/headToWin/ui_board_fail_1p.png);
+}
+
+.finishedBoardText{
+  position: absolute;
+  top: calc(25% + min(5vh, 5vw));
+  width: calc(min(70vh, 70vw));
+  display: flex;
+  font-family:  "Arzachel", system-ui;
+  justify-content: space-evenly;
+  flex-direction: column;
+  font-size: calc(min(4.5vh, 4.5vw));
+  font-weight: bold;
+  color: white;
+  pointer-events: none;
+  text-align: center;
+}
+/*-----------------------------------------------------------------------------------------------*/
+.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper {
+  position: absolute;
+  top: calc(43% - min(3vh, 3vw));
+  left: calc((100vw - min(45vh, 45vw))/2);
+  /*width: calc(min(45vh, 45vw));*/
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  font-size: calc(min(6vh, 6vw));
+  font-weight: bold;
+  color: #7C5729;
+  gap: calc(min(3vh, 3vw));
+}
+.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: calc(min(1.5vh, 1.5vw));
+  /*height: calc(min(9vh, 9vw));*/
+}
+.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row > .label {
+  font-family: "Arzachel", system-ui;
+  font-weight: bolder;
+}
+.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row > .icon {
+  height: calc(min(5vh, 5vw));
+}
+.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row.score > .icon {
+  content: url(../images/headToWin/icon_star_empty.png);
+}
+.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row.score > .icon.show {
+  content: url(../images/headToWin/icon_star.png);
+}
+/*.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row.time > .icon {
+  content: url(../images/iconTime.png);
+}*/
+.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row > .value {
+  font-family: 'BoinkLETPlain', sans-serif;
+  font-weight: normal;
+  margin-right: calc(min(-2vh, -2vw)); /* Adjust the margin to the right */
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+.finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper {
+  position: absolute;
+  top: calc(50% + min(12vh, 12vw));
+  left: calc((100vw - min(40vh, 40vw))/2);
+  width: calc(min(45vh, 45vw));
+  height: calc(min(6vh, 6vw));
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1vw;
+}
+
+.finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper > .backHomeBtn {
+  background: url(../images/headToWin/quit_btn.png);
+  background-size: contain;
+  width: calc(min(28.7vh, 28.7vw));
+  height: 100%;
+  background-repeat: no-repeat;
+  scale: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper > .backHomeBtn:active,
+.finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper > .backHomeBtn.touched {
+  /*background: url(../images/btnGreen.png);
+  background-size: contain;
+  width: calc(min(28.7vh, 28.7vw));
+  height: 100%;
+  background-repeat: no-repeat;
+  -webkit-tap-highlight-color: transparent;*/
+  scale: 0.8;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper > .playAgainBtn {
+  background: url(../images/headToWin/btn_tryagain.png);
+  background-size: contain;
+  width: calc(min(28.7vh, 28.7vw));
+  height: 100%;
+  background-repeat: no-repeat;
+  scale: 1;
+  -webkit-tap-highlight-color: transparent;
+  animation: jump 0.8s infinite;
+}
+
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(3px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+.finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper > .playAgainBtn:active,
+.finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper > .playAgainBtn.touched {
+  /*background: url(../images/btnGreen.png);
+  background-size: contain;
+  width: calc(min(28.7vh, 28.7vw));
+  height: 100%;
+  background-repeat: no-repeat;
+  -webkit-tap-highlight-color: transparent;*/
+  scale: 0.8;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.playAgainText,
+.backHomeText {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -70%);
+  font-family: "Arzachel", system-ui;
+  font-weight: 800;
+  font-size: calc(min(4.5vh, 4.5vw));
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+  /*-webkit-text-stroke: 2px #797979;*/
+  text-align: center;
+  pointer-events: none;
+}
+
+/*-----------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------*/
