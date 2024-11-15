@@ -1,19 +1,9 @@
-import * as handdetection from '@tensorflow-models/hand-pose-detection';
+import * as posedetection from '@tensorflow-models/pose-detection';
 import State from './state';
 import Sound from './sound';
 import Camera from './camera';
-import Game from './headToWin';
-import view from './view';
-//import { logController } from './logController';
+import Game from './spelling';
 
-
-const fingerLookupIndices = {
-  thumb: [0, 1, 2, 3, 4],
-  indexFinger: [0, 5, 6, 7, 8],
-  middleFinger: [0, 9, 10, 11, 12],
-  ringFinger: [0, 13, 14, 15, 16],
-  pinky: [0, 17, 18, 19, 20],
-}; // for rendering each finger as a polyline
 
 export class RendererCanvas2d {
   constructor(canvas) {
@@ -21,37 +11,34 @@ export class RendererCanvas2d {
     this.videoWidth = canvas.width;
     this.videoHeight = canvas.height;
     this.lastPoseValidValue = false;
-    this.modelType = null;
+    this.modelType = posedetection.SupportedModels.BlazePose;
     this.scoreThreshold = 0.75;
-    this.triggerAudio = false;
-    this.headKeypoints = ['nose', 'left_eye_inner', 'left_eye', 'left_eye_outer', 'right_eye_inner', 'right_eye', 'right_eye_outer', 'left_ear', 'right_ear'];
-    this.headCircle = null;
-    this.headCircleXScale = 0.9;
-    this.headCircleYScale = 1.4;
+    this.center_shoulder = null;
+    this.triggeredAudio = false;
+    this.canvasWrapperRect = null;
     this.showSkeleton = false;
   }
 
   draw(rendererParams) {
-    const [video, hands, isFPSMode, bodySegmentationCanvas, showMask = true] = rendererParams;
+    const [video, poses, isFPSMode, bodySegmentationCanvas] = rendererParams;
     this.videoWidth = video.width;
     this.videoHeight = video.height;
     this.ctx.canvas.width = this.videoWidth;
     this.ctx.canvas.height = this.videoHeight;
 
-    this.lineHeight = this.videoHeight / 2.5;
-    /*this.redBoxX = this.videoWidth / 3;
+    this.redBoxX = this.videoWidth / 3;
     this.redBoxY = this.videoHeight / 5 * 1;
     this.redBoxWidth = this.videoWidth / 3;
-    this.redBoxHeight = this.videoHeight / 5 * 4;*/
+    this.redBoxHeight = this.videoHeight / 5 * 4;
 
     this.drawCtx(video, bodySegmentationCanvas);
     if (['prepare', 'counting3', 'counting2', 'counting1', 'counting0', 'playing', 'outBox'].includes(State.state)) {
       let isCurPoseValid = false;
-      if (hands && hands.length > 0) {
+      if (poses && poses.length > 0) {
         let ratio = video.width / video.videoWidth;
-        this.drawResults(hands, ratio, isFPSMode);
-
-        isCurPoseValid = this.isPoseValid(hands);
+        this.drawResults(poses, ratio, isFPSMode);
+        //this.isPoseValid(poses, video.width / video.videoWidth);
+        isCurPoseValid = this.isPoseValid(poses, video.width / video.videoWidth);
         if (isCurPoseValid && State.bodyInsideRedBox.value == true) {
           if (State.state == 'prepare' && State.getStateLastFor() > 3500) {
             State.changeState('counting3');
@@ -92,117 +79,194 @@ export class RendererCanvas2d {
           }
         }
       }
-      this.drawHeadTracker(showMask);
-      this.drawHorizontalLine(isCurPoseValid);
+      this.drawBox(isCurPoseValid);
     }
   }
-
-  checkCircleRectIntersection(
-    circleX, circleY, circleRadius,
-    rectLeft, rectTop, rectRight, rectBottom
-  ) {
-    // Calculate the distance between the circle center and the closest point on the rectangle
-    let distanceX = Math.max(rectLeft - circleX, 0, circleX - rectRight);
-    let distanceY = Math.max(rectTop - circleY, 0, circleY - rectBottom);
-
-    // Check if the distance is less than the circle radius
-    let distanceSquared = distanceX * distanceX + distanceY * distanceY;
-    return distanceSquared <= (circleRadius * circleRadius);
+  isOutOfBounds(keypoint) {
+    return (
+      keypoint.x < this.redBoxX ||
+      keypoint.x > (this.redBoxX + this.redBoxWidth) ||
+      keypoint.y < this.redBoxY ||
+      keypoint.y > (this.redBoxY + this.redBoxHeight)
+    );
   }
+  isPoseValid(poses) {
+    if (!poses[0]) return false;
+    let pose = poses[0];
+    let passScore = this.scoreThreshold;
+    let isBodyOutBox;
 
-  isPoseValid(hands) {
-    if (hands != null) {
-
-      let isBodyOutBox = hands.length === 0 ? true : false;
+    if (pose.keypoints != null) {
+      //我建議膊頭兩點，腰兩點，膝頭兩點，手肘兩點，手腕兩點入框就可以玩
+      //nose, left_eye_inner, left_eye, left_eye_outer, right_eye_inner, right_eye, right_eye_outer, left_ear, right_ear, mouth_left, mouth_right, left_shoulder, right_shoulder, left_elbow, right_elbow, left_wrist, right_wrist, left_pinky, right_pinky, left_index, right_index, left_thumb, right_thumb, left_hip, right_hip, left_knee, right_knee, left_ankle, right_ankle, left_heel, right_heel, left_foot_index, right_foot_index
+      //let checkKeypoints = pose.keypoints.filter(k=>['left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow', 'left_wrist', 'right_wrist', 'left_hip', 'right_hip', 'left_knee', 'right_knee'].includes(k.name) && k.score>0.65);
+      const isNoseOutBox = pose.keypoints
+        .filter(k => k.name === 'nose' && k.score > passScore)
+        .some(keypoint => this.isOutOfBounds(keypoint));
+      const isShoulderOutBox = this.center_shoulder && this.isOutOfBounds(this.center_shoulder);
+      isBodyOutBox = this.center_shoulder ? (isShoulderOutBox && isNoseOutBox) : isNoseOutBox;
 
       State.setPoseState('bodyInsideRedBox', !isBodyOutBox);
       if (isBodyOutBox) {
         if (State.state == 'playing') State.changeState('outBox', 'outBox');
-        //logController.log('outBox', 'outBox');
-        //this.drawHeadTracker(false);
         return false;
       }
+
+      const questionBoard = null;
+      if (Game.randomQuestion) {
+        if (Game.randomQuestion.type === 'Listening') {
+          questionBoard = document.querySelector('.questionAudioBg');
+        }
+        else if (Game.randomQuestion.type === 'FillingBlank') {
+          questionBoard = document.querySelector('.questionImgBg');
+        }
+      }
+
       //檢查是否有選到圖
-      /* let optionWrappers = document.querySelectorAll('.canvasWrapper > .optionArea > .optionWrapper.show');
-       let canvasWrapper = document.querySelector('.canvasWrapper');
-       if (State.state == 'playing' && ['waitAns'].includes(State.stateType)) {
-
-         let touchingWord = [];
-         if (this.headCircle) {
-
-           const canvasWrapperRect = canvasWrapper.getBoundingClientRect();
-           //logController.log(this.headCircle);
-           for (let option of optionWrappers) {
-             const optionRect = option.getBoundingClientRect();
-             if (
-               (this.headCircle.x + (this.headCircle.radius * this.headCircleXScale)) > (optionRect.left - canvasWrapperRect.left) &&
-               (this.headCircle.x - (this.headCircle.radius * this.headCircleXScale)) < (optionRect.right - canvasWrapperRect.left) &&
-               (this.headCircle.y + (this.headCircle.radius * this.headCircleYScale)) > (optionRect.top - canvasWrapperRect.top) &&
-               (this.headCircle.y - (this.headCircle.radius * this.headCircleYScale)) < (optionRect.bottom - canvasWrapperRect.top)
-             ) {
-               touchingWord.push(option);
-             }
-           }
-         }
-         else {
-           headTracker.style.display = 'none';
-         }
-
-         for (let option of optionWrappers) {
-           if (touchingWord.includes(option) && !option.classList.contains('touch')) {
-             State.setPoseState('selectedImg', option);
-             //logController.log("touch ", option);
-             Game.fillWord(option, this.headCircle);
-           }
-         }
-
-         if (touchingWord.length === 0) State.setPoseState('selectedImg', '');
-       }
-       else if (State.state == 'playing' && ['wrong'].includes(State.stateType)) {
-         for (let option of optionWrappers) option.classList.remove('touch');
-         State.changeState('playing', 'waitAns');
-       }*/
-
+      let optionWrappers = document.querySelectorAll('.canvasWrapper > .optionArea > .optionWrapper.show');
+      let canvasWrapper = document.querySelector('.canvasWrapper');
+      this.canvasWrapperRect = canvasWrapper.getBoundingClientRect();
+      if (State.state == 'playing' && ['waitAns'].includes(State.stateType)) {
+        const checkKeypoints = pose.keypoints.filter(k => ['right_wrist', 'left_wrist'].includes(k.name) && k.score > passScore);
+        this.handleInteractions(checkKeypoints);
+      }
+      else if (State.state == 'playing' && ['wrong'].includes(State.stateType)) {
+        for (let option of optionWrappers) option.classList.remove('touch');
+        State.changeState('playing', 'waitAns');
+      }
       return true;
     } else {
       return false;
     }
   }
-
-  drawHorizontalLine(isCurPoseValid) {
-    const centerY = this.lineHeight; // Calculate the vertical center of the screen
-    const startX = 0; // Start of the line (left edge)
-    const endX = this.videoWidth; // End of the line (right edge)
-
-    this.ctx.beginPath();
-    this.ctx.lineWidth = isCurPoseValid ? 5 : Math.max(10, this.videoHeight * 0.01);
-    this.ctx.moveTo(startX, centerY); // Move to the start of the line
-    this.ctx.lineTo(endX, centerY); // Draw the line to the end point
-    this.ctx.strokeStyle = isCurPoseValid ? '#FFFFFF' : '#ff0000';
-    this.ctx.stroke();
-
-    if (!this.lastPoseValidValue && isCurPoseValid && State.isSoundOn) {
-      Sound.play('poseValid');
+  handleBackSpaceBtnDetection(optionWrappers, resetBtn, wristX, wristY) {
+    const offsetX = (window.innerWidth / 7.68);
+    if (resetBtn) {
+      if (
+        wristX > resetBtn.offsetLeft * 2 + offsetX &&
+        wristX < (resetBtn.offsetLeft * 2 + resetBtn.offsetWidth * 2) + (offsetX / 2) &&
+        wristY - 30 > resetBtn.offsetTop &&
+        wristY - 130 < (resetBtn.offsetTop + resetBtn.offsetHeight)
+      ) {
+        if (!Game.isTriggeredBackSpace) {
+          for (let option of optionWrappers) option.classList.remove('touch');
+          Game.backSpaceWord(resetBtn);
+        }
+      }
     }
-    this.lastPoseValidValue = isCurPoseValid;
+  }
+  updateHandDisplays(optionWrappers, keypoints, rightHandImg, leftHandImg, resetBtn) {
+    rightHandImg.style.display = 'none';
+    leftHandImg.style.display = 'none';
+
+    keypoints.forEach(point => {
+      const { x: wristX, y: wristY, name } = point;
+      const handImg = name === 'right_wrist' ? rightHandImg : leftHandImg;
+      const handAdjustedWristX = this.handAdjustWristX(name, wristX);
+      handImg.style.left = `${(handAdjustedWristX / window.innerWidth) * 95}vw`;
+      handImg.style.top = `${wristY - (window.innerWidth / 12)}px`;
+      handImg.style.display = 'block';
+
+      this.handleBackSpaceBtnDetection(optionWrappers, resetBtn, wristX, wristY);
+    });
+
+    const touchingWords = this.checkTouchingWords(optionWrappers, rightHandImg, leftHandImg);
+    this.handleWordSelection(touchingWords);
+  }
+  handAdjustWristX(handName, wristX) {
+    return handName === 'right_wrist' ? wristX - 20 : wristX;
+  }
+  checkTouchingWords(optionWrappers, rightHandImg, leftHandImg) {
+    const touchingWords = [];
+    const rightHandBounds = rightHandImg.getBoundingClientRect();
+    const leftHandBounds = leftHandImg.getBoundingClientRect();
+
+    optionWrappers.forEach(option => {
+      const optionRect = option.getBoundingClientRect();
+      if (this.isTouching(rightHandBounds, optionRect) && !Game.isTriggeredBackSpace) {
+        touchingWords.push(option);
+      }
+      if (this.isTouching(leftHandBounds, optionRect) && !Game.isTriggeredBackSpace) {
+        touchingWords.push(option);
+      }
+    });
+
+    return touchingWords;
+  }
+  isTouching(handBounds, optionRect) {
+    return (
+      handBounds.right > optionRect.left &&
+      handBounds.left < optionRect.right &&
+      handBounds.bottom > optionRect.top &&
+      handBounds.top < optionRect.bottom
+    );
+  }
+  handleWordSelection(touchingWords) {
+    if (touchingWords.length > 0) {
+      touchingWords.forEach(option => {
+        if (!option.classList.contains('touch')) {
+          State.setPoseState('selectedImg', option);
+          Game.fillWord(option);
+        }
+      });
+    } else {
+      State.setPoseState('selectedImg', '');
+    }
+  }
+  checkAudioButtonInteraction(audioBtn, rightHandImg, leftHandImg) {
+    if (!audioBtn) return;
+    const audioBtnRect = audioBtn.getBoundingClientRect();
+    const audioRectHalf = audioBtnRect.width * 0.5;
+    this.triggerAudioInteraction(rightHandImg, audioBtnRect, audioRectHalf);
+    this.triggerAudioInteraction(leftHandImg, audioBtnRect, audioRectHalf);
+    if (audioBtn.classList.contains('clicked') && !Game.touchBtn) {
+      Game.motionTriggerPlayAudio(false);
+    }
   }
 
-  drawHeadTracker(status = true) {
-    if (this.headCircle) {
-      if (status) {
-        const xInVw = (this.headCircle.x / window.innerWidth) * 100;
-        const maxWidth = this.headCircle.radius * 2 / window.innerWidth * 130;
-        const width = `calc(${maxWidth}vw)`;
-        const left = `calc(${xInVw}vw - ${maxWidth / 2}vw)`;
-        const offsetY = Math.max(10, this.headCircle.radius / 1.6);
-        const top = `calc(${this.headCircle.y - this.headCircle.radius - offsetY}px)`;
+  triggerAudioInteraction(handImg, audioBtnRect, audioRectHalf) {
+    if (handImg.style.display === 'none') return;
 
-        view.showHeadTracker(true, width, left, top);
-      }
-      else {
-        view.showHeadTracker(false);
+    const handBounds = handImg.getBoundingClientRect();
+    if (
+      handBounds.right > audioBtnRect.left + audioRectHalf &&
+      handBounds.left < audioBtnRect.right - audioRectHalf &&
+      handBounds.bottom > audioBtnRect.top &&
+      handBounds.top < audioBtnRect.bottom
+    ) {
+      Game.motionTriggerPlayAudio(true);
+    }
+  }
+
+  handleResetButton(resetBtn) {
+    if (resetBtn) {
+      if (!Game.isTriggeredBackSpace && resetBtn.classList.contains('active') && !Game.touchBtn) {
+        resetBtn.classList.remove('active');
       }
     }
+  }
+  handleInteractions(keypoints) {
+    const optionWrappers = document.querySelectorAll('.canvasWrapper > .optionArea > .optionWrapper.show');
+    const resetBtn = document.querySelector('.resetBtn');
+    const audioBtn = document.querySelector('.buttonWrapper');
+    const rightHandImg = document.getElementById('right-hand');
+    const leftHandImg = document.getElementById('left-hand');
+    this.updateHandDisplays(optionWrappers, keypoints, rightHandImg, leftHandImg, resetBtn);
+    this.checkAudioButtonInteraction(audioBtn, rightHandImg, leftHandImg);
+    this.handleResetButton(resetBtn);
+  }
+
+  drawBox(isCurPoseValid) {
+    //this.ctx.translate(this.videoWidth, 0);
+    //this.ctx.scale(-1, 1);
+    this.ctx.beginPath();
+    this.ctx.lineWidth = isCurPoseValid ? 1 : Math.max(10, this.videoHeight * 0.01);//20230821老師話想轉1px白色  Math.max(10, this.videoHeight * 0.01);
+    //this.ctx.roundRect(this.redBoxX, this.redBoxY, this.redBoxWidth, this.redBoxHeight, [this.videoHeight * 0.02]);
+    this.ctx.rect(this.redBoxX, this.redBoxY, this.redBoxWidth, this.redBoxHeight);
+    this.ctx.strokeStyle = isCurPoseValid ? '#FFFFFF' : '#ff0000';//20230821老師話想轉1px白色  isCurPoseValid ? '#00ff00' : '#ff0000';
+    this.ctx.stroke();
+    if (!this.lastPoseValidValue && isCurPoseValid && State.isSoundOn) Sound.play('poseValid');
+    this.lastPoseValidValue = isCurPoseValid;
   }
 
   drawCtx(video, bodySegmentationCanvas) {
@@ -210,128 +274,127 @@ export class RendererCanvas2d {
       this.ctx.translate(this.videoWidth, 0);
       this.ctx.scale(-1, 1);
     }
-    /*this.ctx.drawImage(bodySegmentationCanvas ? bodySegmentationCanvas : video, 0, 0, this.videoWidth, this.videoHeight);
-    if (Camera.constraints.video.facingMode == 'user') {
-      this.ctx.translate(this.videoWidth, 0);
-      this.ctx.scale(-1, 1);
-    }*/
-    // Draw the current video frame or the body segmentation canvas
     this.ctx.drawImage(bodySegmentationCanvas ? bodySegmentationCanvas : video, 0, 0, this.videoWidth, this.videoHeight);
-    //this.enhanceSharpness();
     if (Camera.constraints.video.facingMode == 'user') {
       this.ctx.translate(this.videoWidth, 0);
       this.ctx.scale(-1, 1);
     }
-  }
-
-  enhanceSharpness() {
-    const imageData = this.ctx.getImageData(0, 0, this.videoWidth, this.videoHeight);
-    const data = imageData.data;
-    const width = imageData.width;
-    const height = imageData.height;
-    const outputData = this.ctx.createImageData(width, height);
-    const output = outputData.data;
-
-    // 锐化卷积核
-    const kernel = [
-      [0, -1, 0],
-      [-1, 5, -1],
-      [0, -1, 0]
-    ];
-
-    for (let y = 1; y < height - 1; y++) {
-      for (let x = 1; x < width - 1; x++) {
-        const idx = (y * width + x) * 4;
-        let r = 0, g = 0, b = 0;
-
-        // 应用卷积核
-        for (let ky = -1; ky <= 1; ky++) {
-          for (let kx = -1; kx <= 1; kx++) {
-            const pixelIdx = ((y + ky) * width + (x + kx)) * 4;
-            r += data[pixelIdx] * kernel[ky + 1][kx + 1];
-            g += data[pixelIdx + 1] * kernel[ky + 1][kx + 1];
-            b += data[pixelIdx + 2] * kernel[ky + 1][kx + 1];
-          }
-        }
-        // 限制 RGB 值在 0-255 之间
-        output[idx] = Math.min(Math.max(r, 0), 255);     // R
-        output[idx + 1] = Math.min(Math.max(g, 0), 255); // G
-        output[idx + 2] = Math.min(Math.max(b, 0), 255); // B
-        output[idx + 3] = 255; // Alpha
-      }
-    }
-    // 将处理后的数据绘制回 Canvas
-    this.ctx.putImageData(outputData, 0, 0);
   }
 
   clearCtx() {
     this.ctx.clearRect(0, 0, this.videoWidth, this.videoHeight);
   }
 
-  drawResults(hands, ratio, isFPSMode) {
-    // Sort by right to left hands.
-    hands.sort((hand1, hand2) => {
-      if (hand1.handedness < hand2.handedness) return 1;
-      if (hand1.handedness > hand2.handedness) return -1;
-      return 0;
+  drawResults(poses, ratio, isFPSMode) {
+    for (const pose of poses) {
+      this.drawResult(pose, ratio, isFPSMode);
+    }
+  }
+
+  drawResult(pose, ratio, isFPSMode) {
+    if (pose.keypoints != null) {
+      this.keypointsFitRatio(pose.keypoints, ratio);
+      if (isFPSMode || this.showSkeleton) this.drawKeypoints(pose.keypoints);
+      this.drawSkeleton(pose.keypoints, pose.id, isFPSMode);
+    }
+  }
+
+  drawKeypoints(keypoints) {
+    const keypointInd = posedetection.util.getKeypointIndexBySide(this.modelType);
+    this.ctx.fillStyle = 'Red';
+    this.ctx.strokeStyle = 'White';
+    this.ctx.lineWidth = 2;
+
+    for (const i of keypointInd.middle) {
+      this.drawKeypoint(keypoints[i]);
+    }
+
+    this.ctx.fillStyle = 'Green';
+    for (const i of keypointInd.left) {
+      this.drawKeypoint(keypoints[i]);
+    }
+
+    this.ctx.fillStyle = 'Orange';
+    for (const i of keypointInd.right) {
+      this.drawKeypoint(keypoints[i]);
+    }
+  }
+
+  keypointsFitRatio(keypoints, ratio) {
+    for (let keypoint of keypoints) {
+      keypoint.x = (Camera.constraints.video.facingMode == 'user') ? this.videoWidth - (keypoint.x * ratio) : (keypoint.x * ratio);
+      keypoint.y = keypoint.y * ratio;
+    }
+  }
+
+  drawKeypoint(keypoint) {
+    // If score is null, just show the keypoint.
+    const score = keypoint.score != null ? keypoint.score : 1;
+    //const scoreThreshold = params.STATE.modelConfig.scoreThreshold || 0;
+
+    if (score >= this.scoreThreshold) {
+      const circle = new Path2D();
+      circle.arc(keypoint.x, keypoint.y, 4, 0, 2 * Math.PI);
+      this.ctx.fill(circle);
+      this.ctx.stroke(circle);
+    }
+  }
+
+  drawSkeleton(keypoints, poseId, isFPSMode) {
+    const color = 'White';
+    this.ctx.fillStyle = color;
+    this.ctx.strokeStyle = color;
+    this.ctx.lineWidth = 2;
+
+    let left_shoulder = null;
+    let right_shoulder = null;
+
+    posedetection.util.getAdjacentPairs(this.modelType).forEach(([i, j]) => {
+      const kp1 = keypoints[i];
+      const kp2 = keypoints[j];
+
+      // If score is null, just show the keypoint.
+      const score1 = kp1.score != null ? kp1.score : 1;
+      const score2 = kp2.score != null ? kp2.score : 1;
+
+      if (score1 >= this.scoreThreshold && score2 >= this.scoreThreshold) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(kp1.x, kp1.y);
+        this.ctx.lineTo(kp2.x, kp2.y);
+        if (isFPSMode || this.showSkeleton) this.ctx.stroke();
+      }
+
+      if (kp1.name === 'left_shoulder') left_shoulder = kp1;
+      if (kp1.name === 'right_shoulder') right_shoulder = kp1;
+
+      if (kp2.name === 'left_shoulder') left_shoulder = kp2;
+      if (kp2.name === 'right_shoulder') right_shoulder = kp2;
     });
 
-    // Pad hands to clear empty scatter GL plots.
-    while (hands.length < 2) hands.push({});
+    // Draw circle around the head
+    if (left_shoulder && right_shoulder) {
+      const center_shoulderX = (left_shoulder.x + right_shoulder.x) / 2;
+      const center_shoulderY = (left_shoulder.y + right_shoulder.y) / 2;
 
-    for (let i = 0; i < hands.length; ++i) {
-      this.drawResult(hands[i], ratio);
+      this.center_shoulder = {
+        x: center_shoulderX,
+        y: center_shoulderY,
+      };
+
+      if (this.center_shoulder) {
+        // Draw the keypoint as a circle
+        this.ctx.fillStyle = 'Blue';
+        this.ctx.strokeStyle = 'White';
+        this.ctx.lineWidth = 2;
+        const circle = new Path2D();
+        circle.arc(this.center_shoulder.x, this.center_shoulder.y, 4, 0, 2 * Math.PI);
+        if (isFPSMode || this.showSkeleton) {
+          this.ctx.fill(circle);
+          this.ctx.stroke(circle);
+        }
+      }
     }
+
   }
-
-  drawResult(hand, ratio) {
-    if (hand.keypoints != null) {
-      this.drawKeypoints(hand.keypoints, hand.handedness, ratio);
-    }
-  }
-
-  drawKeypoints(keypoints, handedness, ratio) {
-    const keypointsArray = keypoints;
-    this.ctx.fillStyle = handedness === 'Left' ? 'Red' : 'Blue';
-    this.ctx.strokeStyle = 'White';
-    this.ctx.lineWidth = 10;
-
-    for (let i = 0; i < keypointsArray.length; i++) {
-      const y = keypointsArray[i].x * ratio; // Scale x coordinate
-      const x = keypointsArray[i].y * ratio; // Scale y coordinate
-      this.drawPoint(x - 2, y - 2, 3); // Adjusted drawing of the point
-    }
-
-    const fingers = Object.keys(fingerLookupIndices);
-    for (let i = 0; i < fingers.length; i++) {
-      const finger = fingers[i];
-      const points = fingerLookupIndices[finger].map(idx => ({
-        x: keypoints[idx].x * ratio, // Scale x coordinate
-        y: keypoints[idx].y * ratio // Scale y coordinate
-      }));
-      this.drawPath(points, false);
-    }
-  }
-
-  drawPath(points, closePath) {
-    const region = new Path2D();
-    region.moveTo(points[0].x, points[0].y);
-    for (let i = 1; i < points.length; i++) {
-      const point = points[i];
-      region.lineTo(point.x, point.y);
-    }
-
-    if (closePath) {
-      region.closePath();
-    }
-    this.ctx.stroke(region);
-  }
-
-  drawPoint(y, x, r) {
-    this.ctx.beginPath();
-    this.ctx.arc(x, y, r, 0, 2 * Math.PI);
-    this.ctx.fill();
-  }
-
 
 }

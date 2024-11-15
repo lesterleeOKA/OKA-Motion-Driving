@@ -1,5 +1,6 @@
-import Game from './headToWin';
+import Game from './spelling';
 import State from './state';
+import Util from './util';
 import { logController } from './logController';
 
 export default {
@@ -54,7 +55,8 @@ export default {
   topLeftControl: document.querySelector('.gameWrapper > .topLeftControl'),
   selectCounts: document.querySelectorAll('.canvasWrapper > .optionArea > .optionWrapper > .selectCount'),
 
-  headTracker: document.getElementById('head'),
+  rightHandImg: document.getElementById('right-hand'),
+  leftHandImg: document.getElementById('left-hand'),
   playerIcon: document.getElementById('userIcon'),
   fpsModeBtn: document.getElementById('fpsButton'),
 
@@ -63,11 +65,11 @@ export default {
   //-----------------------------------------------------------------------------------------------
   preloadedFallingImages: [],
   optionImages: [
-    require("./images/headToWin/meteor1.png"),
-    require("./images/headToWin/meteor2.png"),
-    require("./images/headToWin/meteor3.png"),
-    /*require("./images/headToWin/fruit4.png"),
-    require("./images/headToWin/fruit5.png"),*/
+    require("./images/spelling/fruit1.png"),
+    require("./images/spelling/fruit2.png"),
+    require("./images/spelling/fruit3.png"),
+    require("./images/spelling/fruit4.png"),
+    require("./images/spelling/fruit5.png"),
   ],
   toAPIImageUrl(url) {
     if (url === null) return;
@@ -79,6 +81,7 @@ export default {
         return response.blob(); // Get the image as a Blob
       })
       .then(blob => {
+        Util.updateLoadingStatus("Loading Images");
         let successUrl = URL.createObjectURL(blob);
         logController.log("success blob", successUrl);
         this.preloadedFallingImages.push(successUrl);
@@ -94,6 +97,15 @@ export default {
       this.toAPIImageUrl(path);
     });
   },
+  /*preloadUsedImages() {
+    this.optionImages.forEach((path) => {
+      const img = new Image();
+      img.src = path;
+      this.preloadedFallingImages.push(img);
+    });
+
+    Util.updateLoadingStatus("Loading Images");
+  },*/
 
   showInstruction() {
     this.instructionWrapper.style.top = 0;
@@ -163,6 +175,12 @@ export default {
   //-----------------------------------------------------------------------------------------------
   showFinished() {
     this.finishedWrapper.classList.add("show");
+    /*let fullScore = 0;
+    for (let stage of Game.stages) for (let question of stage.questions) fullScore += question.correctImgNum;
+    let ttlScore = 0;
+    for (let score of Game.score) ttlScore += score;
+    this.finishedScore.innerText = ttlScore + "/" + fullScore;*/
+    //this.finishedTime.innerText = Game.getCurTimeString();
   },
   hideFinished() {
     this.finishedWrapper.classList.remove("show");
@@ -265,16 +283,10 @@ export default {
     for (let selectCount of this.selectCounts) selectCount.innerHTML = value;
   },
   //-----------------------------------------------------------------------------------------------
-  setHeadTrackerMask(imgUrl = null) {
-    if (imgUrl) {
-      this.headTracker.src = imgUrl;
-    }
-  },
-  showHeadTracker(status, width = null, left = null, top = null) {
-    if (width) this.headTracker.style.width = width;
-    if (left) this.headTracker.style.left = left;
-    if (top) this.headTracker.style.top = top;
-    this.headTracker.style.display = status ? 'block' : 'none';
+
+  showHands(status) {
+    this.rightHandImg.style.display = status ? 'block' : 'none';
+    this.leftHandImg.style.display = status ? 'block' : 'none';
   },
 
   setPlayerIcon(iconUrl = null) {

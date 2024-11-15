@@ -138,6 +138,7 @@ const QuestionManager = {
 
     logController.log("Filtered: ", this.questionField);
   },
+
 };
 
 function getMediaType(mediaPath) {

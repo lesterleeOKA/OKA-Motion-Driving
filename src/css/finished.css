@@ -30,13 +30,13 @@
 .finishedWrapper > .finishedBoardWrapper > .finishedBoard {
   position: relative;
   height: calc(min(50vh, 50vw));
-  content: url(../images/headToWin/ui_board_fail_1p.png);
+  content: url(../images/spelling/ui_board_fail_1p.png);
 }
 .finishedWrapper > .finishedBoardWrapper > .finishedBoard.success {
-  content: url(../images/headToWin/ui_board_pass_1p.png);
+  content: url(../images/spelling/ui_board_pass_1p.png);
 }
 .finishedWrapper > .finishedBoardWrapper > .finishedBoard.fail {
-  content: url(../images/headToWin/ui_board_fail_1p.png);
+  content: url(../images/spelling/ui_board_fail_1p.png);
 }
 
 .finishedBoardText{
@@ -82,10 +82,10 @@
   height: calc(min(5vh, 5vw));
 }
 .finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row.score > .icon {
-  content: url(../images/headToWin/icon_star_empty.png);
+  content: url(../images/spelling/icon_star_empty.png);
 }
 .finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row.score > .icon.show {
-  content: url(../images/headToWin/icon_star.png);
+  content: url(../images/spelling/icon_star.png);
 }
 /*.finishedWrapper > .finishedBoardWrapper > .scoreTimeWrapper > .row.time > .icon {
   content: url(../images/iconTime.png);
@@ -109,7 +109,7 @@
 }
 
 .finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper > .backHomeBtn {
-  background: url(../images/headToWin/quit_btn.png);
+  background: url(../images/spelling/quit_btn.png);
   background-size: contain;
   width: calc(min(28.7vh, 28.7vw));
   height: 100%;
@@ -131,7 +131,7 @@
 }
 
 .finishedWrapper > .finishedBoardWrapper > .finishedBtnWrapper > .playAgainBtn {
-  background: url(../images/headToWin/btn_tryagain.png);
+  background: url(../images/spelling/btn_tryagain_green.png);
   background-size: contain;
   width: calc(min(28.7vh, 28.7vw));
   height: 100%;

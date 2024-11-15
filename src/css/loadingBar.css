@@ -10,7 +10,7 @@
 
 .loadingBarWrapper > .loadingCharacter {
   height: calc(min(18vh, 18vw));
-  content: url(../images/headToWin/ui_princewalk_apng.png);
+  content: url(../images/spelling/ui_princewalk_apng.png);
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
 }
 
@@ -54,7 +54,7 @@
   right: 0;
   height: 104%;
   width: 104%;
-  background-image: url(../images/headToWin/ui_loadingfill.png);
+  background-image: url(../images/Spelling/ui_loadingfill.png);
   background-repeat: no-repeat;
   background-size: 104% 104%;
   background-position: right;

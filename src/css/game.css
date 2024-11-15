@@ -22,7 +22,7 @@
 }
 
 .gameWrapper > .prepareBoardWrapper > .prepareBoard {
-  content: url(../images/headToWin/preparationBoard.png);
+  content: url(../images/spelling/preparationBoard.png);
   height: calc(min(10vh, 12.5vw));
   margin-top: 3.5vh;
   /*position: absolute;
@@ -45,9 +45,6 @@
   position: absolute;
   top: 43%;
   /*font-family: "Arzachel", system-ui;*/
-  /*;
-  font-weight: 100;
-    font-family: Arial, sans-serif;*/
   font-family: 'PoetsenOne', sans-serif;
   font-weight: 100;
   font-size: calc(min(2vh, 2vw));
@@ -56,8 +53,7 @@
   line-height: 1;
   text-align: left;
   padding-left: calc(min(2.5vh, 5.5vw));
-  font-size: calc(min(1.9vh, 1.9vw));
-  /*font-size: calc(min(2vh, 2vw));*/
+  font-size: calc(min(1.5vh, 1.5vw));
   margin-top: calc(min(1.1vh, 1.1vw));
 }
 .gameWrapper > .prepareBoardWrapper >.rule-1 {
@@ -67,7 +63,7 @@
   font-family: 'PoetsenOne', sans-serif;
   font-weight: 100;
   font-size: calc(min(2.5vh, 2.5vw));
-  color: #4b3002;
+  color: #391d02;
   pointer-events: none;
   line-height: 1;
   width: calc(min(55vh, 55vw));
@@ -81,7 +77,7 @@
   font-family: 'PoetsenOne', sans-serif;
   font-weight: 100;
   font-size: calc(min(2.5vh, 2.5vw));
-  color: #4b3002;
+  color: #391d02;
   pointer-events: none;
   line-height: 1;
   width: calc(min(55vh, 55vw));
@@ -113,7 +109,7 @@
 }
 .gameWrapper > .ansResult > .wellDone{
   opacity: 0;
-  content: url(../images/headToWin/ui_welldone.png);
+  content: url(../images/spelling/ui_welldone.png);
   height: calc(min(50.44vh, 50.44vw));
  /* animation: dropAndDisappear 2s forwards; */
 }
@@ -122,11 +118,10 @@
   animation: dropAndDisappear 1s forwards;
   z-index: 5;
 }
-
 .gameWrapper > .ansResult > .incorrect{
   position: absolute;
   opacity: 0;
-  content: url(../images/headToWin/ans_wrong_en.png);
+  content: url(../images/spelling/ans_wrong_en.png);
   width: calc(min(40.44vh, 40.44vw));
   height: auto;
  /* animation: dropAndDisappear 2s forwards; */
@@ -208,7 +203,6 @@
   align-items: baseline;
   transition: all 0.5s ease;
   opacity: 1;
-  z-index: 10;
 }
 
 .gameWrapper > .topLeftControl.hide { opacity: 0; }
@@ -232,7 +226,7 @@
   /*height: calc(min(11.7vh, 11.7vw));*/
   width: calc(min(25.7vh, 25.7vw));
   margin-left: calc(min(2vh, 2vw));
-  content: url(../images/headToWin/p1_score_name.png);
+  content: url(../images/spelling/p1_score_name.png);
   margin-bottom: -4.8vh;
   /*filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));*/
 }
@@ -290,7 +284,7 @@
   width: 100%;
   height: 100%;
   background:
-  url(../images/headToWin/name_box.png) no-repeat center,
+  url(../images/spelling/name_box.png) no-repeat center,
   #3cadee; /* The background color */
   background-size: cover; /* Ensure the image covers the element */
   background-blend-mode: multiply; /* Blend the color with the image */
@@ -324,7 +318,7 @@
 .gameWrapper > .topLeftControl > .timeWrapper > .timeBoard {
   height: calc(min(11.7vh, 11.7vw));
   margin-left: calc(min(-1vh, 3vw));
-  content: url(../images/headToWin/time_new.png);
+  content: url(../images/spelling/time_new.png);
   filter: drop-shadow(10px 10px 20px rgba(0, 0, 0, 0.5));
 }
 .gameWrapper > .topLeftControl > .timeWrapper > .timeText {
@@ -387,7 +381,6 @@
   justify-content: space-evenly;
   display: flex;
   align-items: baseline;
-  z-index: 10;
 }
 
 .gameWrapper > .topRightControl > .tips {
@@ -425,7 +418,7 @@
   background-color: rgba(0,0,0,0.5);
 }
 .loginErrorWrapper > .loginErrorBoard {
-  background-image: url(../images/headToWin/ui_board_error.png);
+  background-image: url(../images/spelling/ui_board_error.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -459,7 +452,7 @@
   pointer-events: none;
 }
 .loginErrorWrapper > .loginErrorBoard  > .errorWrapper > .reloadBtn {
-  content: url(../images/headToWin/Reload_btn.png);
+  content: url(../images/spelling/Reload_btn.png);
   height: calc(min(5vh, 5vw));
   scale: 1;
   -webkit-tap-highlight-color: transparent;
@@ -486,7 +479,6 @@
   opacity: 0;
   pointer-events: none;
   background-color: transparent;
-  z-index: 11;
 }
 .musicOnOffWrapper.show {
   top: 0px;
@@ -496,7 +488,7 @@
   background-color: rgba(0,0,0,0.5);
 }
 .musicOnOffWrapper > .musicOnOffBoard {
-  background-image: url(../images/headToWin/ui_board_sound.png);
+  background-image: url(../images/spelling/ui_board_sound.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -516,7 +508,7 @@
   margin-top: calc(min(25vh, 25vw));
 }
 .musicOnOffWrapper > .musicOnOffBoard  > .musicWrapper > .offBtn {
-  content: url(../images/headToWin/btn_no.png);
+  content: url(../images/spelling/btn_no.png);
   height: calc(min(5vh, 5vw));
   scale: 1;
   -webkit-tap-highlight-color: transparent;
@@ -527,7 +519,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 .musicOnOffWrapper > .musicOnOffBoard  > .musicWrapper > .onBtn {
-  content: url(../images/headToWin/btn_yes.png);
+  content: url(../images/spelling/btn_yes.png);
   height: calc(min(5vh, 5vw));
   scale: 1;
   -webkit-tap-highlight-color: transparent;
@@ -565,6 +557,7 @@
 .gameWrapper > .topRightControl > .musicBtn.off {
   content: url(../images/musicBtnOff.png);
 }
+
 /*-----------------------------------------------------------------------------------------------*/
 .gameWrapper > .topRightControl > .motionBtn {
   width: calc(min(9vh, 9vw));
@@ -588,10 +581,10 @@
   transform: scale(0.8);
 }
 .gameWrapper > .topRightControl > .motionBtn.on {
-  content: url(../images/headToWin/motionBtnOn.png);
+  content: url(../images/Spelling/motionBtnOn.png);
 }
 .gameWrapper > .topRightControl > .motionBtn.off {
-  content: url(../images/headToWin/motionBtnOff.png);
+  content: url(../images/Spelling/motionBtnOff.png);
 }
 /*-----------------------------------------------------------------------------------------------*/
 .gameWrapper > .topRightControl > .exitBtn {
@@ -628,22 +621,22 @@
   transform-origin: center;
 }
 .gameWrapper > .count.c0 {
-  content: url(../images/headToWin/ui_go.png);
+  content: url(../images/spelling/ui_go.png);
   animation: scaleUp 0.75s forwards;
   opacity: 1;
 }
 .gameWrapper > .count.c1 {
-  content: url(../images/headToWin/ui_1.png);
+  content: url(../images/spelling/ui_1.png);
   animation: scaleUp 0.75s forwards;
   opacity: 1;
 }
 .gameWrapper > .count.c2 {
-  content: url(../images/headToWin/ui_2.png);
+  content: url(../images/spelling/ui_2.png);
   animation: scaleUp 0.75s forwards;
   opacity: 1;
 }
 .gameWrapper > .count.c3 {
-  content: url(../images/headToWin/ui_3.png);
+  content: url(../images/spelling/ui_3.png);
   animation: scaleUp 0.75s forwards;
   opacity: 1;
 }
@@ -685,7 +678,7 @@
 .questionBg{
   width: 100%;
   height: auto;
-  content: url(../images/headToWin/ui_board_qtext.png);
+  content: url(../images/spelling/ui_board_qtext.png);
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.35));
   margin-left: calc(min(1.5vh, 1.5vw));
 }
@@ -693,7 +686,7 @@
 .questionAudioBg{
   width: 100%;
   height: auto;
-  content: url(../images/headToWin/ui_board_qaudio.png);
+  content: url(../images/spelling/ui_board_qaudio.png);
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.35));
   left: 2.5%;
   position: absolute;
@@ -702,7 +695,7 @@
 .questionImgBg {
   width: 105%;
   height: 110%;
-  content: url(../images/headToWin/ui_board_qpic.png);
+  content: url(../images/spelling/ui_board_qpic.png);
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.35));
   display: block;
   margin: 0 auto;
@@ -767,7 +760,7 @@
   right: 0;
   height: 104%;
   width: 104%;
-  background-image: url(../images/headToWin/progress_bar_color.png);
+  background-image: url(../images/spelling/progress_bar_color.png);
   background-repeat: no-repeat;
   background-size: 104% 104%;
   background-position: right;

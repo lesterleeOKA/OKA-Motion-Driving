@@ -1,6 +1,6 @@
 import View from './view';
 import Sound from './sound';
-import Game from './headToWin';
+import Game from './spelling';
 import { apiManager } from "./apiManager";
 import { logController } from './logController';
 
@@ -12,8 +12,8 @@ export default {
   stateLastFor: 0,
   stateType: '',
   isSoundOn: true,
-  gameTime: 0,
-  fallSpeed: 0,
+  gameTime: null,
+  fallSpeed: null,
   gamePauseData: {
     state: '',
     stateType: '',
@@ -102,7 +102,6 @@ export default {
         setTimeout(() => Sound.play('start'), 250);
       }
     } else if (state == 'playing') {
-      //View.showTips('tipsReady');
       View.setProgressBar(apiManager.isLogined ? true : false);
       View.showTopLeftControl();
       switch (stateType) {
@@ -152,17 +151,17 @@ export default {
       View.showExit();
     } else if (state == 'outBox') {
       if (stateType == 'outBox') {
+        View.showHands(false);
         if (this.isSoundOn) Sound.play('outBox');
         //View.showTips('tipsOutBox');
         View.showPrepareBoard();
-        Game.selectedCount = 0;
       }
     } else if (state == 'finished') {
       View.setProgressBar(false);
-      View.showHeadTracker(false);
       View.hideTopLeftControl();
       View.hideTips();
       View.hideGame();
+      View.showHands(false);
       View.showFinished();
       Sound.stopAll();
       if (this.isSoundOn) {
@@ -232,7 +231,6 @@ export default {
     }
 
     if (state != 'playing') {
-      View.showHeadTracker(false);
       Game.stopCountTime();
     }
 

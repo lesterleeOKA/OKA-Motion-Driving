@@ -1,4 +1,3 @@
-import Util from './util';
 import { logController } from './logController';
 
 export default {
@@ -18,8 +17,7 @@ export default {
   //-----------------------------------------------------------------------------------------------
   getVideo() {
     //logController.log('in getVideo()');
-    logController.log('in getting videoStream....................................');
-    Util.updateLoadingStatus("Setting Camera");
+
     return new Promise((resolve, reject) => {
       if (!navigator.mediaDevices.getUserMedia && !navigator.mediaDevices) {
         const errMsg = 'Browser API navigator.mediaDevices.getUserMedia not available';
@@ -28,14 +26,14 @@ export default {
         reject(errMsg);
 
       } else {
+        logController.log('start getUserMedia');
         navigator.mediaDevices.getUserMedia(this.constraints).then(stream => {
+          logController.log('got stream from getUserMedia');
           this.videoStream.srcObject = stream;
           this.video.srcObject = stream;
           try {
             this.videoStream.play();
             this.video.play();
-            logController.log('videoStream is ready..............................');
-            Util.updateLoadingStatus("Camera Ready");
           } catch (e) {
             logController.log(e);
           }
@@ -57,15 +55,22 @@ export default {
     });
   },
 
-  initSetup() {
+  initSetup(onComplete = null) {
     videoStream.width = this.constraints['video'].width;
     videoStream.height = this.constraints['video'].height;
-    this.setup();
+    this.setup(() => {
+      if (onComplete) {
+        onComplete();
+      }
+    });
   },
 
-  setup() {
+  setup(callback = null) {
     this.resetSize(this.video);
     addEventListener("resize", (event) => this.resetSize(this.video));
+    if (callback) {
+      callback();
+    }
     return this;
   },
 

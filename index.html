@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" translate="no">
 <head>
-  <title>Head To Win</title>
+  <title>Motion Driving</title>
   <meta name="google" content="notranslate">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0, user-scalable=no">
@@ -48,7 +48,8 @@
     </video>
     <div class="optionArea"></div>
 
-    <img id="head" src="./src/images/headToWin/helmet.png" class="helmet" />
+    <img id="right-hand" src="./src/images/spelling/ui_lefthand.png" class="handCursor" />
+    <img id="left-hand" src="./src/images/spelling/ui_righthand.png" class="handCursor" />
   </div>
 
   <div class="instructionWrapper">
@@ -61,7 +62,7 @@
       <div class="previewImage" id="previewImg"></div>
       <div class="instructionRule">
         <div class="icon"></div>
-        <div class="instructionContent">Use your head to collide the letters!</div>
+        <div class="instructionContent">Use your hands to collect the letters!</div>
       </div>
       <div class="startBtn" alt="Start Button"></div>
     </div>
@@ -70,7 +71,7 @@
   <div class="gameWrapper">
     <div class="prepareBoardWrapper">
       <img class="prepareBoard"></img>
-      <div class="rule">Stay your head under the white line.</div>
+      <div class="rule">Keep your head or shoulders inside the box.</div>
       <!--<div class="prepareTitle">Preparation</div>
       <div class="rule-1">1) Please stand inside the box of the screen.</div>
       <div class="rule-2">2) The system will automatically start a countdown.</div>
@@ -97,7 +98,7 @@
         <div class="playerText">P1</div>
         <div class="scoreText"></div>
         <div class="playerIcon">
-          <img src="./src/images/headToWin/p1_icon.png" alt="Player Icon" id="userIcon">
+          <img src="./src/images/spelling/p1_icon.png" alt="Player Icon" id="userIcon">
         </div>
         <div class="playerName">
           <div class="playerNameBox"></div>
@@ -179,6 +180,7 @@
   </div>
 
   <div class="version">Ver:1.07</div>
+  <!--<div class="debug"></div>-->
   <div class="debug" id="stats"></div>
 </body>
 <script src="src/index.js"></script>

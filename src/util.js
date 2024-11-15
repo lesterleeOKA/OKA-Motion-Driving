@@ -3,7 +3,6 @@ import View from './view';
 import { logController } from './logController';
 
 export default {
-
   percentValue: 0,
   timer: null,
   loadingStatus: null,

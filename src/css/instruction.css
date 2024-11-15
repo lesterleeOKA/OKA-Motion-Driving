@@ -22,7 +22,7 @@
 
 .instructionWrapper > .instructionBoard> .gameTitle {
   position: relative;
-  background-image: url(../images/headToWin/title_headtowin.png);
+  background-image: url(../images/spelling/title_mspell.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -48,7 +48,7 @@
 }
 
 .instructionWrapper > .instructionBoard {
-  background-image: url(../images/headToWin/instructionBoard.png);
+  background-image: url(../images/spelling/instructionBoard.png);
   height: calc(min(65vh, 65vw));
   width: 100%;
   background-repeat: no-repeat;
@@ -61,7 +61,7 @@
   flex-direction: column;
 }
 .instructionWrapper > .instructionBoard > .previewImage {
-  background-image: url(../images/headToWin/mhead_preview.png);
+  background-image: url(../images/screen_mspell.jpg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -82,7 +82,7 @@
   column-gap:calc(min(1vh, 1vw));
 }
 .instructionWrapper > .instructionBoard > .instructionRule > .icon {
-  background-image: url(../images/headToWin/icon_controller.png);
+  background-image: url(../images/spelling/icon_controller.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -105,10 +105,8 @@
 }
 .instructionWrapper > .instructionBoard >.instructionRule > .instructionContent {
   /*font-family: "Arzachel", system-ui;*/
-  /*font-family: 'PoetsenOne', sans-serif;
-    font-weight: 600;*/
-  font-weight: 100;
   font-family: 'PoetsenOne', sans-serif;
+  font-weight: 100;
   font-size: calc(min(2.5vh, 2.5vw));
   color: #7C5729;
   pointer-events: none;
@@ -117,7 +115,7 @@
 }
 
 .instructionWrapper > .instructionBoard > .startBtn {
-  content: url(../images/headToWin/btn_start.png);
+  content: url(../images/spelling/btn_start.png);
   /*width: calc(min(20.7vh, 20.7vw));*/
   height: calc(min(7.5vh, 7.5vw));
   background-repeat: no-repeat;

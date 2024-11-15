@@ -1,6 +1,6 @@
-
-import * as mpHands from '@mediapipe/hands';
-import * as handdetection from '@tensorflow-models/hand-pose-detection';
+import * as posedetection from '@tensorflow-models/pose-detection';
+import * as bodySegmentation from '@tensorflow-models/body-segmentation';
+//import * as mpSelfieSegmentation from '@mediapipe/selfie_segmentation';
 import Camera from './camera';
 import { RendererCanvas2d } from './renderer';
 import Util from './util';
@@ -20,13 +20,15 @@ let rafId;
 let stats;
 let startInferenceTime, numInferences = 0;
 let inferenceTimeSum = 0, lastPanelUpdate = 0;
-const bgImage = require('./images/headToWin/bg.png');
+let drawContour = false;
+let foregroundThresold = 0.65;
+const bgImage = require('./images/spelling/bg.jpg');
 const fpsDebug = document.getElementById('stats');
 let { jwt, id, levelKey, model, removal, fps, gameTime, fallSpeed } = parseUrlParams();
-let holdTimeout;
+let holdTimeout = null;
 //const ctx = canvas.getContext('2d');
 
-/*async function createDetector() {
+async function createDetector() {
   const runtime = 'mediapipe';
   return posedetection.createDetector(posedetection.SupportedModels.BlazePose, {
     runtime,
@@ -34,16 +36,7 @@ let holdTimeout;
     solutionPath: `@mediapipe/pose@0.5.1675469404`,
     enableSegmentation: removal === '1' ? true : false,
     smoothSegmentation: removal === '1' ? true : false,
-  });
-}*/
-
-async function createDetector() {
-  const runtime = 'mediapipe';
-  return handdetection.createDetector(handdetection.SupportedModels.MediaPipeHands, {
-    runtime,
-    modelType: ['full', 'lite'].includes(model) ? model : 'full',
-    maxHands: 2,
-    solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${mpHands.VERSION}`
+    //solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/pose@${mpPose.VERSION}`
   });
 }
 
@@ -71,7 +64,7 @@ async function renderResult() {
     });
   }
 
-  let hands = null;
+  let poses = null;
   let segmentation = null;
   let compositeCanvas = null;
 
@@ -80,10 +73,11 @@ async function renderResult() {
   if (detector != null) {
     beginEstimatePosesStats();
     try {
-      hands = await detector.estimateHands(
-        Camera.video,
-        { flipHorizontal: true });
-
+      poses = await detector.estimatePoses(
+        Camera.video, { maxPoses: 1, flipHorizontal: false });
+      Util.updateLoadingStatus("Setup Viewer");
+      if (removal === '1')
+        segmentation = poses.map(singleSegmentation => singleSegmentation.segmentation);
       //logController.log(poses[0]);
     } catch (error) {
       detector.dispose();
@@ -91,11 +85,11 @@ async function renderResult() {
       alert(error);
     }
 
-    /*if (segmentation && segmentation.length > 0) {
+    if (segmentation && segmentation.length > 0) {
       Util.updateLoadingStatus("Setting Removal");
       const binaryMask = await bodySegmentation.toBinaryMask(
         segmentation, { r: 0, g: 0, b: 0, a: 0 }, { r: 0, g: 0, b: 0, a: 255 },
-        false, 0.65
+        drawContour, foregroundThresold
       );
 
       // Create a composite canvas for the final output
@@ -135,18 +129,17 @@ async function renderResult() {
       // Put the modified video image data back onto the video canvas
       videoContext.putImageData(videoImageData, 0, 0);
       compositeContext.drawImage(videoCanvas, 0, 0, compositeCanvas.width, compositeCanvas.height);
-    }*/
+    }
     endEstimatePosesStats();
   }
 
   let fpsMode = fps === '1' ? true : false;
-  let showMask = !apiManager.isLogined || (apiManager.settings.show_mask && apiManager.settings.show_mask === 1) ? true : false;
 
   if (removal === '1') {
-    if (compositeCanvas) View.renderer.draw([Camera.video, poses, fpsMode, compositeCanvas, showMask]);
+    if (compositeCanvas) View.renderer.draw([Camera.video, poses, fpsMode, compositeCanvas]);
   }
   else {
-    View.renderer.draw([Camera.video, hands, fpsMode, null, showMask]);
+    View.renderer.draw([Camera.video, poses, fpsMode, null]);
   }
   Util.updateLoadingStatus("Game is Ready");
 }
@@ -224,7 +217,6 @@ function gameSetup() {
     View.setPlayerName(apiManager.loginName);
     View.setInstructionContent(apiManager.settings.instructionContent);
     View.preloadUsedImages(apiManager.settings.option_item_images);
-    View.setHeadTrackerMask(apiManager.settings.mask_url);
     logController.log("Completed load files!!!!!!!!!!!!!!!!");
   }
   else {
@@ -233,6 +225,8 @@ function gameSetup() {
       setAPIImage(document.getElementById('bgImage'), bgImage);
     }
   }
+  if (gameTime) State.gameTime = gameTime;
+  if (fallSpeed) State.fallSpeed = fallSpeed;
 }
 
 async function init() {
@@ -245,8 +239,6 @@ async function init() {
   ]);
 
   Util.updateLoadingStatus("Loading Data");
-  State.gameTime = gameTime;
-  State.fallSpeed = fallSpeed;
   // Load question data and handle callbacks
   await new Promise((resolve, reject) => {
     QuestionManager.checkIsLogin(
@@ -264,6 +256,7 @@ async function init() {
       }
     );
   });
+
   // Calculate viewport height for mobile
   let vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -287,7 +280,7 @@ async function init() {
   };
 
   const defaultAudios = [
-    ['bgm', require('./audio/bgm.mp3'), false, 0.5],
+    ['bgm', require('./audio/bgm_mspell.mp3'), false, 0.5],
     ['btnClick', require('./audio/btnClick.wav')],
     ['countDown', require('./audio/countDown.mp3')],
     ['score', require('./audio/score.mp3')],
@@ -304,7 +297,7 @@ async function init() {
     ['lastTen', require('./audio/dingding.wav')],
   ];
 
-  let questionsAudio = null;
+  let questionsAudio = [];
 
   if (apiManager.isLogined) {
     questionsAudio = QuestionManager.mediaType === 'audio' ? QuestionManager.apiMedia : [];
@@ -340,7 +333,7 @@ function handleButtonClick(e) {
       }
       State.gamePauseData.state = State.state;
       State.gamePauseData.stateType = State.stateType;
-
+      //State.changeState('pause');
       apiManager.exitGameRecord(
         () => {
           logController.log("Quit Game");
@@ -556,9 +549,9 @@ function setupEventListeners() {
 
 async function app() {
   //logController.log('in app()');
-  /*if (location.protocol !== 'https:') {
+  if (location.protocol !== 'https:') {
     location.replace(`https:${location.href.substring(location.protocol.length)}`);
-  }*/
+  }
 
   if (fps === '1') {
     fpsDebug.style.opacity = 1;
@@ -567,21 +560,19 @@ async function app() {
 
   init().then(() => {
     setTimeout(() => {
-      Camera.initSetup();
-      //(new FPSMeter({ ui: true })).start();
-      createDetector().then((detector) => {
-        logController.log('initial detector model............................');
-        Util.updateLoadingStatus("Loading Model");
-        //logController.log(detector);
-        //const canvas = document.getElementById('output');
-        View.renderer = new RendererCanvas2d(View.canvas);
-        renderPrediction().then(() => {
-          Util.loadingComplete().then(() => {
-            State.changeState('instruction');
-          });
-        })
+      Camera.initSetup(() => {
+        createDetector().then((detector) => {
+          logController.log('initial detector model............................');
+          Util.updateLoadingStatus("Loading Model");
+          View.renderer = new RendererCanvas2d(View.canvas);
+          renderPrediction().then(() => {
+            Util.loadingComplete().then(() => {
+              State.changeState('instruction');
+            });
+          })
+        });
       });
-    }, 1000);
+    }, 2000);
   });
 
 };

@@ -5,11 +5,12 @@
   transition: opacity 0.5s ease;
   position: relative;
 }
-.canvasWrapper > .helmet{
+.canvasWrapper > .handCursor{
   position: absolute;
   display: none;
   width: calc(min(10vh, 10vw));
   height: auto;
+  z-index: 2;
 }
 
 .canvasWrapper > .optionArea {
@@ -25,24 +26,21 @@
 
 .canvasWrapper > .optionArea > .optionWrapper {
   position: relative;
-  display: inline-block;
   left: 0px;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
   transition: opacity 0.1s ease;
-  opacity: 1;
-  background: url(../images/headToWin/meteor1.png);
+  opacity: 0;
+  background: url(../images/spelling/fruit1.png);
   background-position: center;
-  background-size: contain;
-  transform: scale(1);
-  z-index: 2;
+  background-size: cover;
 }
 
 .buttonWrapper {
   position: relative;
   justify-content: center;
-  background-image: url(../images/headToWin/btn_playaudio.png);
+  background-image: url(../images/spelling/btn_playaudio.png);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -57,7 +55,6 @@
   bottom: calc(min(5.8vh, 5.5vw));
   width: 40%;
   height: 40%;
-  top: -48%;
 }
 .fillBlankPlay{
   width: 100%;
@@ -82,12 +79,9 @@
   transition: opacity 0.1s ease;
   text-align: center;
   font-size: calc(min(3.5vh, 3.5vw));
-  line-height: calc(min(3.5vh, 3.5vw));
   /*font-family: "Arzachel", system-ui;*/
   font-family: 'PoetsenOne', sans-serif;
   font-weight: 100;
-  /*font-family: Arial, sans-serif;
-  font-weight: 600;*/
   width: calc(min(30.7vh, 30.7vw));
   color: rgb(98 48 16);
   height: auto;
@@ -103,12 +97,10 @@
   transition: opacity 0.1s ease;
   text-align: center;
   font-size: var(--question-font-size);
-  line-height: calc(min(3.5vh, 3.5vw));
+  line-height: 3.5vh;
   /*font-family: "Arzachel", system-ui;*/
   font-family: 'PoetsenOne', sans-serif;
   font-weight: 100;
-  /*font-family: Arial, sans-serif;
-  font-weight: 600;*/
   width: calc(min(30.7vh, 30.7vw));
   height: calc(min(26vh, 26vw));
   color: rgb(98 48 16);
@@ -125,19 +117,16 @@
 }
 .questionFillBlankWrapper{
   position: absolute;
-  top: 0%;
-  left: 50%;
+  top: -10%;
+  left: 52%;
   transform: translate(-50%, 50%);
   transition: opacity 0.1s ease;
   text-align: left;
   font-size: var(--question-font-size);
-  padding: calc(min(0.5vh, 0.5vw));
-  line-height: calc(min(4vh, 4vw));
+  line-height: 3.5vh;
   /*font-family: "Arzachel", system-ui;*/
   font-family: 'PoetsenOne', sans-serif;
   font-weight: 100;
-  /*font-family: Arial, sans-serif;
-  font-weight: 600;*/
   width: calc(min(34.7vh, 34.7vw));
   height: calc(min(15vh, 15vw));
   color: rgb(98 48 16);
@@ -147,20 +136,17 @@
   align-items: center;
 }
 .questionAudioWrapper{
-  position: absolute;
+  position: fixed;
   top: -10%;
   left: 50%;
   transform: translate(-50%, 50%);
   transition: opacity 0.1s ease;
-  text-align: left;
+  text-align: center;
   font-size: var(--question-font-size);
-  /*padding: calc(min(0.5vh, 0.5vw));
-  line-height: calc(min(4vh, 4vw));
-  font-family: "Arzachel", system-ui;
+  line-height: 3.5vh;
+  /*font-family: "Arzachel", system-ui;*/
   font-family: 'PoetsenOne', sans-serif;
-  font-weight: 100;*/
-  /*font-family: Arial, sans-serif;
-  font-weight: 600;*/
+  font-weight: 100;
   width: calc(min(30.7vh, 30.7vw));
   height: calc(min(26vh, 26vw));
   color: rgb(98 48 16);
@@ -172,7 +158,7 @@
 .instructionBtn{
   width: calc(min(9vh, 9vw));
   margin-right: calc(min(3vh, 3vw));
-  content: url(../images/headToWin/instuctionBtn.png);
+  content: url(../images/spelling/instuctionBtn.png);
   filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 1));
 }
 .instructionBtn:active {
@@ -181,51 +167,36 @@
   filter: drop-shadow(0px 0px 20px rgba(0, 0, 0, 1));
 }
 .resetBtn{
-  background: url(../images/headToWin/reset_btn.png);
+  background: url(../images/spelling/reset_btn.png);
   background-position: center;
   background-size: cover;
   width: 25%;
   height: 25%;
   position: absolute;
   border: none;
+  z-index: 1;
 }
 .active {
   transform: scale(0.7);
   border: none;
 }
 .resetTextType{
-  top: 36%;
-  right: -4.5%;
+  top: 41%;
+  right: 35%;
 }
 .resetPictureType{
-  bottom: -10%;
-  right: -3.5%;
+  bottom: -13%;
+  right: 35%;
 }
 .resetAudioType{
-  bottom: 30%;
-  right: -0.5%;
+  bottom: 25%;
+  right: 35%;
 }
 
 .answerWrapper{
-    /*font-family: Arial, sans-serif;
-  font-weight: 600;
-  font-family: "Arzachel", system-ui;*/
-  /*position: absolute;
-  left: 50%;
-  transform: translate(-50%, 50%);
-  transition: opacity 0.1s ease;
-  text-align: center;
-  font-size: calc(min(4vh, 4vw));
-  font-family: 'PoetsenOne', sans-serif;
-  font-weight: 100;
-  padding: calc(min(0.2vh, 0.2vw));
-  width: calc(min(32.7vh, 32.7vw));
-  height: calc(min(4.7vh, 4.7vw));
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;*/
-
+  /*background-color: rgb(192 134 97);
+  border-radius: 4%;*/
+  /*font-family: "Arzachel", system-ui;*/
   position: absolute;
   left: 50%;
   transform: translate(-50%, 50%);
@@ -283,34 +254,10 @@
   animation-name: fallingAnimation;
   animation-duration: var(--fallingSpeed);
   animation-timing-function: linear;
-  transform: scale(1);
-}
-
-.canvasWrapper > .optionArea > .optionWrapper.spin {
-  position: absolute;
-  opacity: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation-name: spinning;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-}
-
-.canvasWrapper > .optionArea > .optionWrapper.showBonunce {
-  position: absolute;
-  opacity: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation-name: bounceAnimation;
-  animation-duration: var(--bounce-speed);
-  animation-timing-function: cubic-bezier(0.42,0,1,1);
-  transform-origin: center bottom;
 }
 
 .canvasWrapper > .optionArea > .optionWrapper > .option {
-  position: relative;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -321,41 +268,18 @@
   /*font-family: "Arzachel", system-ui;*/
   font-family: 'PoetsenOne', sans-serif;
   font-weight: 100;
-  /*font-family: Arial, sans-serif;
-  font-weight: 600;*/
   background: transparent;
   border: none;
   color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
-  transform-origin: center center; /* Ensure the options scale from the center */
-  will-change: transform; /* Optimize the animation */
-  word-wrap: break-word; /* Allow long words to break and wrap to the next line */
-  white-space: normal; /* Allow lines to break normally */
-  overflow-wrap: break-word; /* Break long words */
-  padding: 5px; /* Add padding to avoid text touching edges */
-  box-sizing: border-box; /* Include padding in width/height calculations */
-  line-height: var(--line-height);
-}
-.canvasWrapper > .optionArea > .optionWrapper > .option.fixedText {
-  animation-name: fixedRotation;
-  animation-duration: var(--fallingSpeed);
-  animation-timing-function: linear;
 }
 
 :root {
-  --bounce-angle: 0deg;
-  --bounce-bottom-angle: 0deg;
-  --bounce-x: 0px;
-  --bounce-speed: 1s;
-  --head-position-x: 0px;
-  --head-position-y: 0px;
-  --head-bounce-y: 0px;
-  --fallingSpeed: 2.5s;
+  --fallingSpeed: 0s;
   --top-height: 0px;
   --bottom-height: 200px;
   --font-size: 3vh;
-  --line-height: 0px;
   --question-font-size:3vh;
 }
 
@@ -369,45 +293,12 @@
   animation-duration: 1s;
 }
 
-/*@keyframes bounceAnimation {
-  0% {
-    transform: translate(0, var(--head-position-y)) scale(1);
-  }
-  25% {
-    transform: translate(var(--bounce-x), calc(var(--head-position-y) - 100px)) scale(1);
-  }
-  100% {
-    transform: translate(var(--bounce-x), var(--bottom-height)) scale(0.8);
-  }
-}*/
-
-@keyframes bounceAnimation {
-  0% {
-    transform: translate(0, var(--head-position-y)) rotate(0deg);
-  }
-  25%{
-    transform: translate(var(--bounce-x), var(--head-bounce-y)) rotate(var(--bounce-angle));
-  }
-  100% {
-    transform: translate(var(--bounce-x), var(--bottom-height)) rotate(var(--bounce-bottom-angle));
-  }
-}
-
 @keyframes fallingAnimation {
   0% {
-    transform: translateY(var(--top-height)) rotate(0deg);
+    transform: translateY(var(--top-height));
   }
   100% {
-    transform: translateY(var(--bottom-height)) rotate(360deg);
-  }
-}
-
-@keyframes fixedRotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
+    transform: translateY(var(--bottom-height));
   }
 }
 
@@ -509,4 +400,3 @@
   font-family: 'PoetsenOne';
   src: url('../font/PoetsenOne-Regular.ttf') format('truetype');
 }
-

@@ -34,4 +34,3 @@ export function setupStats() {
   }
   return stats;
 }
-
